@@ -1,0 +1,29 @@
+{
+  "name": "codealpha-ecommerce-store",
+  "version": "1.0.0",
+  "description": "Full-Stack Modern E-commerce Store built with Node.js, Express, SQLite, and Vanilla HTML/CSS/JS for CodeAlpha Internship",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "seed": "node db/seed.js"
+  },
+  "keywords": [
+    "ecommerce",
+    "express",
+    "sqlite",
+    "javascript",
+    "codealpha",
+    "internship-task"
+  ],
+  "author": "Pratyay Pal",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.5",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "sqlite3": "^6.0.1"
+  }
+}
