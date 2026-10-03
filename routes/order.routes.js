@@ -72,19 +72,19 @@ router.post('/', optionalAuth, async (req, res) => {
     let discount = 0;
     if (discountCode) {
       const code = discountCode.toUpperCase().trim();
-      if (code === 'CODEALPHA15' || code === 'ALPHA15') {
+      if (code === 'TECH15' || code === 'SAVE15' || code === 'WELCOME15') {
         discount = Number((subtotal * 0.15).toFixed(2));
-      } else if (code === 'ALPHA10' || code === 'WELCOME10') {
+      } else if (code === 'SAVE10' || code === 'WELCOME10') {
         discount = Number((subtotal * 0.10).toFixed(2));
       }
     }
 
-    // Calculate Shipping (Free shipping over $50 or with FREESHIP code)
-    let shippingFee = subtotal >= 50 || (discountCode && discountCode.toUpperCase().trim() === 'FREESHIP') ? 0 : 9.99;
+    // Calculate Shipping (Free shipping over ₹499 or with FREESHIP code)
+    let shippingFee = subtotal >= 499 || (discountCode && discountCode.toUpperCase().trim() === 'FREESHIP') ? 0 : 49.00;
     
-    // Calculate Tax (8% estimated)
+    // Calculate Tax (18% GST estimated)
     const taxableAmount = Math.max(0, subtotal - discount);
-    const tax = Number((taxableAmount * 0.08).toFixed(2));
+    const tax = Number((taxableAmount * 0.18).toFixed(2));
 
     // Calculate Total
     const total = Number((taxableAmount + tax + shippingFee).toFixed(2));

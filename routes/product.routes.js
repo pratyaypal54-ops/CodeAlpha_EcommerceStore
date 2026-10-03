@@ -2,12 +2,21 @@ const express = require('express');
 const router = express.Router();
 const { get, all, run } = require('../db/database');
 
-// Helper to safely parse JSON strings from SQLite
+// Helper to safely parse JSON strings and normalize image paths from SQLite
 const formatProduct = (product) => {
   if (!product) return null;
+  let image = product.image;
+  if (image && image.startsWith('/images/')) {
+    image = image.substring(1);
+  }
+  let gallery = product.gallery ? JSON.parse(product.gallery) : [];
+  if (Array.isArray(gallery)) {
+    gallery = gallery.map(img => (typeof img === 'string' && img.startsWith('/images/')) ? img.substring(1) : img);
+  }
   return {
     ...product,
-    gallery: product.gallery ? JSON.parse(product.gallery) : [],
+    image,
+    gallery,
     specs: product.specs ? JSON.parse(product.specs) : {}
   };
 };

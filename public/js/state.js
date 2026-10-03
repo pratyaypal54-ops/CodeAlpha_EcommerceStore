@@ -11,7 +11,7 @@ const State = {
   filters: {
     category: 'All',
     search: '',
-    maxPrice: 300,
+    maxPrice: 200000,
     sort: 'featured',
     inStockOnly: false
   },
@@ -99,18 +99,18 @@ const State = {
       discount = subtotal * this.activeCoupon.discountRate;
     }
 
-    // Free shipping on orders of $50 or more
+    // Free shipping on orders of ₹499 or more
     let shippingFee = 0;
     if (subtotal > 0) {
-      if (subtotal >= 50 || (this.activeCoupon && this.activeCoupon.code === 'FREESHIP')) {
+      if (subtotal >= 499 || (this.activeCoupon && this.activeCoupon.code === 'FREESHIP')) {
         shippingFee = 0;
       } else {
-        shippingFee = 9.99;
+        shippingFee = 49.00;
       }
     }
 
     const taxableAmount = Math.max(0, subtotal - discount);
-    const tax = subtotal > 0 ? Number((taxableAmount * 0.08).toFixed(2)) : 0;
+    const tax = subtotal > 0 ? Number((taxableAmount * 0.18).toFixed(2)) : 0;
     const total = Number((taxableAmount + tax + shippingFee).toFixed(2));
 
     return {
@@ -127,19 +127,19 @@ const State = {
     if (!rawCode) return { success: false, message: 'Please enter a coupon code.' };
     const code = rawCode.trim().toUpperCase();
 
-    if (code === 'CODEALPHA15' || code === 'ALPHA15') {
-      this.activeCoupon = { code, discountRate: 0.15, label: '15% Off (CodeAlpha)' };
-    } else if (code === 'ALPHA10' || code === 'WELCOME10') {
-      this.activeCoupon = { code, discountRate: 0.10, label: '10% Off' };
+    if (code === 'TECH15' || code === 'SAVE15' || code === 'WELCOME15') {
+      this.activeCoupon = { code: 'TECH15', discountRate: 0.15, label: '15% Off (TECH15)' };
+    } else if (code === 'SAVE10' || code === 'WELCOME10') {
+      this.activeCoupon = { code: 'SAVE10', discountRate: 0.10, label: '10% Off' };
     } else if (code === 'FREESHIP') {
       this.activeCoupon = { code, discountRate: 0.0, freeShipping: true, label: 'Free Shipping' };
     } else {
-      return { success: false, message: 'Coupon code not found. Try CODEALPHA15 or ALPHA10.' };
+      return { success: false, message: 'Coupon code not found. Try TECH15 or WELCOME10.' };
     }
 
     localStorage.setItem('techstore_coupon', JSON.stringify(this.activeCoupon));
     this.saveCart();
-    return { success: true, message: `Coupon "${code}" applied!`, coupon: this.activeCoupon };
+    return { success: true, message: `Coupon applied successfully!`, coupon: this.activeCoupon };
   },
 
   toggleWishlist(productId) {

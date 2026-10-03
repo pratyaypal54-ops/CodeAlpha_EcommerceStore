@@ -34,7 +34,7 @@ app.get('/api/health', (req, res) => {
   res.status(200).json({
     status: 'healthy',
     timestamp: new Date().toISOString(),
-    service: 'CodeAlpha E-commerce Store API',
+    service: 'TechStore E-commerce Store API',
     uptime: process.uptime()
   });
 });
@@ -74,7 +74,7 @@ const startServer = async () => {
 
     app.listen(PORT, () => {
       console.log('====================================================');
-      console.log(`🚀 CodeAlpha E-Commerce Server is running!`);
+      console.log(`🚀 TechStore Server is running!`);
       console.log(`📡 Local URL: http://localhost:${PORT}`);
       console.log(`📚 API Health: http://localhost:${PORT}/api/health`);
       console.log(`🔒 Mode: ${process.env.NODE_ENV || 'development'}`);

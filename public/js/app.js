@@ -4,6 +4,78 @@
  */
 
 document.addEventListener('DOMContentLoaded', async () => {
+  // Currency Formatter (Indian Rupee ₹)
+  const formatCurrency = (val) => {
+    const num = Number(val) || 0;
+    return '₹' + num.toLocaleString('en-IN', {
+      maximumFractionDigits: 2,
+      minimumFractionDigits: num % 1 === 0 ? 0 : 2
+    });
+  };
+  window.formatCurrency = formatCurrency;
+
+  // --------------------------------------------------------------------------
+  // Distinct Fallback Images & Relative Path Formatter
+  // Ensures every product has its own unique, authentic, high-res photo
+  // and loads properly whether on file://, VS Code Live Server, or Express
+  // --------------------------------------------------------------------------
+  window.PRODUCT_FALLBACK_IMAGES = {
+    1: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80', // Sony WH-1000XM4 Headphones
+    2: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80', // Apple Watch Series 9
+    3: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=800&q=80', // Apple AirPods Pro
+    4: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=800&q=80', // Keychron K2 Keyboard
+    5: 'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=800&q=80', // Logitech G PRO X Mouse
+    6: 'https://images.unsplash.com/photo-1585060544812-6b45742d762f?auto=format&fit=crop&w=800&q=80', // Logitech C920 Webcam
+    7: 'https://images.unsplash.com/photo-1622445262464-84b1456045b6?auto=format&fit=crop&w=800&q=80', // Anker 3-in-1 MagSafe Stand
+    8: 'https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=800&q=80', // JBL Flip 6 Speaker
+    9: 'https://images.unsplash.com/photo-1609592426508-410a6d59ce6b?auto=format&fit=crop&w=800&q=80', // Anker 737 Power Bank
+    10: 'https://images.unsplash.com/photo-1593642632823-8f785ba67e45?auto=format&fit=crop&w=800&q=80', // BenQ ScreenBar
+    11: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80', // Case Logic Backpack
+    12: 'https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?auto=format&fit=crop&w=800&q=80', // Xiaomi Smart Band 5
+    13: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=80', // Apple iPhone 15 Pro
+    14: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=800&q=80', // Apple Studio Display 27"
+    15: 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=800&q=80', // Samsung 55" Smart TV
+    16: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=800&q=80', // Apple iPad Pro 11"
+    17: 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=800&q=80', // Sony PS5 Console
+  };
+
+  window.CATEGORY_FALLBACK_IMAGES = {
+    'Audio': 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80',
+    'Wearables': 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80',
+    'Peripherals': 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=800&q=80',
+    'Accessories': 'https://images.unsplash.com/photo-1609592426508-410a6d59ce6b?auto=format&fit=crop&w=800&q=80',
+    'Smart Home': 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=800&q=80',
+    'Phones': 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=80',
+    'Smartphones': 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=80',
+    'Monitors': 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=800&q=80',
+    'Displays': 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=800&q=80',
+    'TVs': 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=800&q=80',
+    'Tablets': 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=800&q=80',
+    'Gaming': 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=800&q=80'
+  };
+
+  window.getProductFallbackImage = function(id, category) {
+    if (id && window.PRODUCT_FALLBACK_IMAGES[id]) {
+      return window.PRODUCT_FALLBACK_IMAGES[id];
+    }
+    if (category && window.CATEGORY_FALLBACK_IMAGES[category]) {
+      return window.CATEGORY_FALLBACK_IMAGES[category];
+    }
+    return 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80';
+  };
+
+  window.formatProductImageUrl = function(url) {
+    if (!url) return '';
+    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+      return url;
+    }
+    // Clean leading slash so the browser resolves relative to current page
+    if (url.startsWith('/images/')) {
+      return url.substring(1);
+    }
+    return url;
+  };
+
   // --------------------------------------------------------------------------
   // 1. Toast Notifications
   // --------------------------------------------------------------------------
@@ -145,7 +217,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const demoFillBtn = document.getElementById('demo-fill-btn');
   if (demoFillBtn) {
     demoFillBtn.addEventListener('click', () => {
-      document.getElementById('login-email').value = 'demo@codealpha.com';
+      document.getElementById('login-email').value = 'demo@techstore.com';
       document.getElementById('login-password').value = 'password123';
       showToast('Demo login details filled in!', 'info');
     });
@@ -265,7 +337,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                   ${items.map(it => `<div>• ${it.quantity}x ${it.title}</div>`).join('')}
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-subtle); padding-top: 10px;">
-                  <span style="font-weight: 700; font-size: 1.05rem;">Total: $${Number(order.total).toFixed(2)}</span>
+                  <span style="font-weight: 700; font-size: 1.05rem;">Total: ${formatCurrency(order.total)}</span>
                   <button class="btn btn-outline btn-sm track-order-btn" data-order="${orderNum}">Track Status</button>
                 </div>
               </div>
@@ -371,7 +443,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       return `
         <div class="product-card" data-id="${prod.id}">
           <div class="product-image-container" onclick="window.openProductModal(${prod.id})">
-            <img src="${prod.image}" alt="${prod.title}" loading="lazy" />
+            <img src="${window.formatProductImageUrl(prod.image)}" alt="${prod.title}" loading="lazy" onerror="this.onerror=null; this.src=window.getProductFallbackImage(${prod.id}, '${prod.category}');" />
             
             <div class="product-badges-wrap">
               ${discountPercent ? `<span class="badge badge-danger">-${discountPercent}%</span>` : ''}
@@ -403,8 +475,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             <div class="product-footer">
               <div class="product-pricing">
-                <span class="product-price">$${prod.price.toFixed(2)}</span>
-                ${prod.original_price ? `<span class="product-original-price">$${prod.original_price.toFixed(2)}</span>` : ''}
+                <span class="product-price">${formatCurrency(prod.price)}</span>
+                ${prod.original_price ? `<span class="product-original-price">${formatCurrency(prod.original_price)}</span>` : ''}
               </div>
 
               <button class="btn btn-primary btn-sm add-to-cart-btn" 
@@ -422,12 +494,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   const resetFilters = () => {
     State.filters.category = 'All';
     State.filters.search = '';
-    State.filters.maxPrice = 300;
+    State.filters.maxPrice = 200000;
     State.filters.sort = 'featured';
     State.filters.inStockOnly = false;
 
-    if (priceSlider) priceSlider.value = 300;
-    if (priceDisplay) priceDisplay.textContent = '$300';
+    if (priceSlider) priceSlider.value = 200000;
+    if (priceDisplay) priceDisplay.textContent = '₹2,00,000';
     if (searchInput) searchInput.value = '';
     if (searchClearBtn) searchClearBtn.style.display = 'none';
     if (sortSelect) sortSelect.value = 'featured';
@@ -445,7 +517,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (priceSlider && priceDisplay) {
     priceSlider.addEventListener('input', (e) => {
       const val = e.target.value;
-      priceDisplay.textContent = `$${val}`;
+      priceDisplay.textContent = formatCurrency(val);
       State.filters.maxPrice = Number(val);
     });
     priceSlider.addEventListener('change', loadProducts);
@@ -515,19 +587,20 @@ document.addEventListener('DOMContentLoaded', async () => {
       const res = await api.products.getById(id);
       const prod = res.product;
 
-      const gallery = prod.gallery && prod.gallery.length > 0 ? prod.gallery : [prod.image];
+      const rawGallery = prod.gallery && prod.gallery.length > 0 ? prod.gallery : [prod.image];
+      const gallery = rawGallery.map(img => window.formatProductImageUrl(img));
       const specs = prod.specs || {};
 
       productModalBody.innerHTML = `
         <div class="product-modal-grid">
           <div>
             <div class="product-gallery-preview">
-              <img id="main-gallery-img" src="${gallery[0]}" alt="${prod.title}" />
+              <img id="main-gallery-img" src="${gallery[0]}" alt="${prod.title}" onerror="this.onerror=null; this.src=window.getProductFallbackImage(${prod.id}, '${prod.category}');" />
             </div>
             <div class="product-thumbnails-row">
               ${gallery.map((img, idx) => `
                 <div class="gallery-thumb ${idx === 0 ? 'active' : ''}" onclick="window.switchGalleryThumb('${img}', this)">
-                  <img src="${img}" alt="Thumbnail" />
+                  <img src="${img}" alt="Thumbnail" onerror="this.onerror=null; this.src=window.getProductFallbackImage(${prod.id}, '${prod.category}');" />
                 </div>
               `).join('')}
             </div>
@@ -546,8 +619,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             </div>
 
             <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 16px;">
-              <span style="font-size: 1.7rem; font-weight: 800; color: var(--accent-cyan);">$${prod.price.toFixed(2)}</span>
-              ${prod.original_price ? `<span style="font-size: 1rem; color: var(--text-muted); text-decoration: line-through;">$${prod.original_price.toFixed(2)}</span>` : ''}
+              <span style="font-size: 1.7rem; font-weight: 800; color: var(--accent-cyan);">${formatCurrency(prod.price)}</span>
+              ${prod.original_price ? `<span style="font-size: 1rem; color: var(--text-muted); text-decoration: line-through;">${formatCurrency(prod.original_price)}</span>` : ''}
             </div>
 
             <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 20px; line-height: 1.6;">
@@ -623,7 +696,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   window.switchGalleryThumb = (imgUrl, thumbEl) => {
     const mainImg = document.getElementById('main-gallery-img');
-    if (mainImg) mainImg.src = imgUrl;
+    if (mainImg) mainImg.src = window.formatProductImageUrl(imgUrl);
     document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
     if (thumbEl) thumbEl.classList.add('active');
   };
@@ -731,7 +804,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         shippingProgressWrap.style.display = 'none';
       } else {
         shippingProgressWrap.style.display = 'block';
-        const freeGoal = 50.00;
+        const freeGoal = 499.00;
         const remaining = Math.max(0, freeGoal - totals.subtotal);
         const percent = Math.min(100, (totals.subtotal / freeGoal) * 100);
 
@@ -743,7 +816,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           if (remaining === 0 || (State.activeCoupon && State.activeCoupon.code === 'FREESHIP')) {
             progText.innerHTML = `🎉 <strong>Congratulations!</strong> You get <strong>Free Shipping</strong>!`;
           } else {
-            progText.innerHTML = `Add <strong>$${remaining.toFixed(2)}</strong> more to unlock <strong>Free Shipping</strong>!`;
+            progText.innerHTML = `Add <strong>${formatCurrency(remaining)}</strong> more to unlock <strong>Free Shipping</strong>!`;
           }
         }
       }
@@ -769,11 +842,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       cartItemsContainer.innerHTML = State.cart.map(item => `
         <div class="cart-item">
           <div class="cart-item-image">
-            <img src="${item.image}" alt="${item.title}" />
+            <img src="${window.formatProductImageUrl(item.image)}" alt="${item.title}" onerror="this.onerror=null; this.src=window.getProductFallbackImage(${item.id}, '${item.category}');" />
           </div>
           <div class="cart-item-info">
             <div class="cart-item-title">${item.title}</div>
-            <div class="cart-item-price">$${(item.price * item.quantity).toFixed(2)}</div>
+            <div class="cart-item-price">${formatCurrency(item.price * item.quantity)}</div>
             <div class="cart-item-actions">
               <div class="quantity-control" style="transform: scale(0.85); transform-origin: left;">
                 <button class="qty-btn" onclick="State.updateCartQuantity(${item.id}, ${item.quantity - 1})">-</button>
@@ -795,15 +868,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     const shippingEl = document.getElementById('cart-shipping-val');
     const grandTotalEl = document.getElementById('cart-grand-total-val');
 
-    if (subtotalEl) subtotalEl.textContent = `$${totals.subtotal.toFixed(2)}`;
-    if (taxEl) taxEl.textContent = `$${totals.tax.toFixed(2)}`;
-    if (shippingEl) shippingEl.textContent = totals.shippingFee === 0 ? 'FREE' : `$${totals.shippingFee.toFixed(2)}`;
-    if (grandTotalEl) grandTotalEl.textContent = `$${totals.total.toFixed(2)}`;
+    if (subtotalEl) subtotalEl.textContent = formatCurrency(totals.subtotal);
+    if (taxEl) taxEl.textContent = formatCurrency(totals.tax);
+    if (shippingEl) shippingEl.textContent = totals.shippingFee === 0 ? 'FREE' : formatCurrency(totals.shippingFee);
+    if (grandTotalEl) grandTotalEl.textContent = formatCurrency(totals.total);
 
     if (discountRow && discountEl) {
       if (totals.discount > 0) {
         discountRow.style.display = 'flex';
-        discountEl.textContent = `-$${totals.discount.toFixed(2)} (${State.activeCoupon.label})`;
+        discountEl.textContent = `-${formatCurrency(totals.discount)} (${State.activeCoupon.label})`;
       } else {
         discountRow.style.display = 'none';
       }
@@ -970,7 +1043,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             <strong>${item.title}</strong>
             <span style="color: var(--text-muted); margin-left: 8px;">x${item.quantity}</span>
           </div>
-          <span style="font-weight: 700;">$${(item.price * item.quantity).toFixed(2)}</span>
+          <span style="font-weight: 700;">${formatCurrency(item.price * item.quantity)}</span>
         </div>
       `).join('');
     }
@@ -979,25 +1052,25 @@ document.addEventListener('DOMContentLoaded', async () => {
       reviewTotalsWrap.innerHTML = `
         <div class="cart-totals-row">
           <span>Subtotal:</span>
-          <span>$${totals.subtotal.toFixed(2)}</span>
+          <span>${formatCurrency(totals.subtotal)}</span>
         </div>
         ${totals.discount > 0 ? `
           <div class="cart-totals-row" style="color: var(--success);">
             <span>Discount (${State.activeCoupon.code}):</span>
-            <span>-$${totals.discount.toFixed(2)}</span>
+            <span>-${formatCurrency(totals.discount)}</span>
           </div>
         ` : ''}
         <div class="cart-totals-row">
-          <span>Tax (8%):</span>
-          <span>$${totals.tax.toFixed(2)}</span>
+          <span>Estimated GST (18%):</span>
+          <span>${formatCurrency(totals.tax)}</span>
         </div>
         <div class="cart-totals-row">
           <span>Shipping:</span>
-          <span>${totals.shippingFee === 0 ? 'FREE' : `$${totals.shippingFee.toFixed(2)}`}</span>
+          <span>${totals.shippingFee === 0 ? 'FREE' : formatCurrency(totals.shippingFee)}</span>
         </div>
         <div class="cart-totals-row grand-total">
           <span>Total:</span>
-          <span style="color: var(--accent-cyan);">$${totals.total.toFixed(2)}</span>
+          <span style="color: var(--accent-cyan);">${formatCurrency(totals.total)}</span>
         </div>
       `;
     }
@@ -1062,7 +1135,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (numEl) numEl.textContent = order.orderNumber || order.order_number;
     if (emailEl) emailEl.textContent = order.customerEmail || order.customer_email;
-    if (totalEl) totalEl.textContent = `$${Number(order.total).toFixed(2)}`;
+    if (totalEl) totalEl.textContent = formatCurrency(order.total);
 
     if (printBtn) {
       printBtn.onclick = () => window.print();

@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { get } = require('../db/database');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'codealpha_default_secret_key_2025';
+const JWT_SECRET = process.env.JWT_SECRET || 'techstore_default_secret_key_2025';
 
 // Required Authentication Middleware
 const authenticate = async (req, res, next) => {

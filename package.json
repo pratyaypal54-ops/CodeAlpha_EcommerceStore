@@ -1,7 +1,7 @@
 {
-  "name": "codealpha-ecommerce-store",
+  "name": "techstore-ecommerce-store",
   "version": "1.0.0",
-  "description": "Full-Stack Modern E-commerce Store built with Node.js, Express, SQLite, and Vanilla HTML/CSS/JS for CodeAlpha Internship",
+  "description": "Full-Stack Modern E-commerce Store built with Node.js, Express, SQLite, and Vanilla HTML/CSS/JS",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -13,8 +13,8 @@
     "express",
     "sqlite",
     "javascript",
-    "codealpha",
-    "internship-task"
+    "store",
+    "shopping-cart"
   ],
   "author": "Pratyay Pal",
   "license": "MIT",

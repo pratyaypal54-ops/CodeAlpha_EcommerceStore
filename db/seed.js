@@ -1,193 +1,207 @@
 const bcrypt = require('bcryptjs');
 const { db, run, get, all, initDatabase } = require('./database');
 
-// Realistic, human-written products catalog
+// Authentic, brand-accurate products catalog with original names and matching high-res images
 const seedProducts = [
   {
-    title: 'Wireless Noise-Cancelling Headphones',
-    slug: 'wireless-noise-cancelling-headphones',
+    title: 'Sony WH-1000XM4 Wireless Noise-Cancelling Headphones',
+    slug: 'sony-wh1000xm4-wireless-headphones',
     category: 'Audio',
-    price: 129.99,
-    original_price: 159.99,
-    short_description: 'Comfortable over-ear headphones with deep bass and 40-hour battery life.',
-    description: 'Enjoy your favorite music, podcasts, and work calls without distractions. These over-ear headphones feature active noise cancellation to block out background chatter, soft memory-foam ear cups for all-day comfort, and up to 40 hours of playtime on a single charge. Connects easily with phones, laptops, and tablets via Bluetooth 5.2.',
-    image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80',
+    price: 19999,
+    original_price: 29990,
+    short_description: 'Industry-leading noise cancellation, 30-hour battery, touch controls, and LDAC high-res audio.',
+    description: 'Immerse yourself in pure music with Sony WH-1000XM4. Dual noise sensor technology captures ambient noise and passes the data to the trusted HD Noise Cancelling Processor QN1. Featuring Speak-to-Chat, multipoint Bluetooth connection, and up to 30 hours of continuous battery life.',
+    image: 'images/products/sony_wh1000xm4.jpg',
     gallery: JSON.stringify([
-      'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1484704849700-f032a568e944?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=800&q=80'
+      'images/products/sony_wh1000xm4.jpg',
+      'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80'
     ]),
     stock: 18,
     rating: 4.8,
     reviews_count: 52,
     featured: 1,
     specs: JSON.stringify({
+      'Brand': 'Sony',
+      'Model': 'WH-1000XM4',
       'Type': 'Over-Ear Wireless',
-      'Battery Life': 'Up to 40 Hours',
-      'Charging Time': '1.5 Hours (USB-C)',
-      'Noise Cancellation': 'Active Noise Cancellation (ANC)',
-      'Connectivity': 'Bluetooth 5.2 + 3.5mm Audio Cable',
-      'Warranty': '1 Year Replacement'
+      'Battery Life': '30 Hours (Quick Charge: 10 min for 5 hours)',
+      'Noise Cancellation': 'Industry-leading Active Noise Cancellation (HD QN1)',
+      'Connectivity': 'Bluetooth 5.0 (LDAC, AAC, SBC) + 3.5mm Jack',
+      'Microphone': 'Built-in with Precise Voice Pickup',
+      'Warranty': '1 Year Sony India Warranty'
     })
   },
   {
-    title: 'Daily Fitness Smartwatch with Heart Rate Tracker',
-    slug: 'daily-fitness-smartwatch',
+    title: 'Apple Watch Series 9 GPS (45mm Midnight)',
+    slug: 'apple-watch-series-9',
     category: 'Wearables',
-    price: 89.99,
-    original_price: 119.99,
-    short_description: 'Tracks steps, workouts, sleep, and heart rate with a 7-day battery.',
-    description: 'A clean and practical smartwatch designed for everyday fitness. Track your daily steps, distance, heart rate, and sleep quality. It displays incoming calls and text message alerts, and its water-resistant build means you do not have to worry about sweat or light rain. The battery lasts about a week under normal use.',
-    image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80',
+    price: 41900,
+    original_price: 44900,
+    short_description: 'Brighter Always-On Retina display, powerful S9 SiP chip, Double Tap gesture, and health sensors.',
+    description: 'Smarter, brighter, and mightier. Apple Watch Series 9 helps you stay active, healthy, safe, and connected. Powered by the S9 SiP chip for a super-bright display and magical new Double Tap gesture to interact without touching the screen. Advanced health sensors track blood oxygen, ECG, sleep, and heart rate.',
+    image: 'images/products/apple_watch_s9.jpg',
     gallery: JSON.stringify([
-      'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=800&q=80'
+      'images/products/apple_watch_s9.jpg',
+      'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80'
     ]),
     stock: 24,
-    rating: 4.7,
+    rating: 4.8,
     reviews_count: 43,
     featured: 1,
     specs: JSON.stringify({
-      'Screen': '1.4-inch Color Touchscreen',
-      'Battery Life': 'Up to 7 Days',
-      'Water Resistance': 'IP68 (Water & Dust Resistant)',
-      'Sensors': 'Heart Rate, Sleep Tracker, Pedometer',
-      'Compatibility': 'iPhone and Android Phones',
-      'Weight': '38g'
+      'Brand': 'Apple',
+      'Case Size': '45mm Midnight Aluminium Case',
+      'Display': 'Always-On Retina OLED (up to 2000 nits)',
+      'Chip': 'S9 SiP with 64-bit dual-core processor',
+      'Sensors': 'Blood Oxygen, ECG, Temperature sensing, Heart Rate',
+      'Water Resistance': '50m Water Resistant (Swimproof)',
+      'Battery Life': 'Up to 18 Hours (36h in Low Power Mode)'
     })
   },
   {
-    title: 'Compact Wireless Earbuds with Charging Case',
-    slug: 'compact-wireless-earbuds',
+    title: 'Apple AirPods Pro (2nd Generation, USB-C)',
+    slug: 'apple-airpods-pro-2nd-gen',
     category: 'Audio',
-    price: 49.99,
-    original_price: 69.99,
-    short_description: 'Pocket-sized earbuds with clear call quality and quick Bluetooth pairing.',
-    description: 'Great for the gym, commute, or daily office meetings. These earbuds fit securely in your ears and deliver balanced, clear sound. The pocket-sized charging case provides up to 24 hours of total listening time, and the built-in microphone keeps your voice clear on phone calls.',
-    image: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=800&q=80',
+    price: 20999,
+    original_price: 24900,
+    short_description: 'Up to 2x more Active Noise Cancellation, Adaptive Audio, and MagSafe Charging Case (USB-C).',
+    description: 'AirPods Pro (2nd Gen) with USB-C deliver exceptional acoustic fidelity powered by the Apple H2 chip. Experience next-level Active Noise Cancellation, Adaptive Audio that automatically tailors noise control to your environment, and Personalized Spatial Audio with dynamic head tracking.',
+    image: 'images/products/apple_airpods_pro.jpg',
     gallery: JSON.stringify([
-      'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1572536147248-ac59a8abfa4b?auto=format&fit=crop&w=800&q=80'
+      'images/products/apple_airpods_pro.jpg',
+      'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=800&q=80'
     ]),
     stock: 30,
-    rating: 4.6,
-    reviews_count: 38,
+    rating: 4.9,
+    reviews_count: 58,
     featured: 0,
     specs: JSON.stringify({
-      'Playtime': '6 Hours per charge (24 Hours with case)',
-      'Charging Port': 'USB-C Fast Charging',
-      'Water Resistance': 'IPX5 Sweat Resistant',
-      'Bluetooth': 'v5.3',
-      'Microphone': 'Built-in dual microphones'
+      'Brand': 'Apple',
+      'Chip': 'Apple H2 Headphone Chip',
+      'Audio Technology': 'Active Noise Cancellation, Adaptive Audio, Transparency Mode',
+      'Case': 'MagSafe Charging Case (USB-C) with Speaker and Lanyard loop',
+      'Battery': 'Up to 6 hours listening (up to 30 hours with case)',
+      'Resistance': 'IP54 dust, sweat, and water resistant'
     })
   },
   {
-    title: 'Mechanical Gaming & Office Keyboard (RGB Backlit)',
-    slug: 'mechanical-rgb-keyboard',
+    title: 'Keychron K2 Wireless Mechanical Keyboard (RGB Backlit)',
+    slug: 'keychron-k2-wireless-keyboard',
     category: 'Peripherals',
-    price: 79.99,
-    original_price: 99.99,
-    short_description: 'Smooth linear red switches, adjustable RGB lighting, and solid build.',
-    description: 'Whether you are coding, typing long essays, or playing games, this mechanical keyboard offers a comfortable and responsive typing experience. Features quiet red switches, durable keycaps that will not fade, and customizable RGB backlighting so you can type comfortably at night.',
-    image: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=800&q=80',
+    price: 7499,
+    original_price: 9999,
+    short_description: 'Compact 75% layout, Gateron Red linear switches, vibrant RGB lighting, and dual Mac/Windows support.',
+    description: 'The Keychron K2 is a 75% layout wireless mechanical keyboard that retains all essential multimedia and function keys. Connects with up to 3 devices via Bluetooth 5.1 and switches easily among them. Features smooth linear Gateron G Pro Red switches and striking RGB backlighting.',
+    image: 'images/products/keychron_k2.jpg',
     gallery: JSON.stringify([
-      'https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?auto=format&fit=crop&w=800&q=80'
+      'images/products/keychron_k2.jpg',
+      'https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=800&q=80'
     ]),
     stock: 15,
     rating: 4.8,
     reviews_count: 61,
     featured: 1,
     specs: JSON.stringify({
-      'Switch Type': 'Quiet Red Mechanical Switches',
-      'Layout': 'Compact Tenkeyless (TKL)',
-      'Lighting': 'Full RGB with 12 lighting modes',
-      'Cable': 'Detachable 1.8m Braided USB-C Cable',
-      'Compatibility': 'Windows, Mac, Linux'
+      'Brand': 'Keychron',
+      'Model': 'K2 Version 2',
+      'Switches': 'Gateron G Pro Red (Smooth Linear)',
+      'Layout': '75% Compact (84 Keys)',
+      'Backlight': '18 Types of RGB Backlight Modes',
+      'Connectivity': 'Bluetooth 5.1 and Type-C Wired Cable',
+      'Battery': '4,000mAh Rechargeable Li-polymer (Up to 240 hours)',
+      'Compatibility': 'macOS / iOS / Windows / Android'
     })
   },
   {
-    title: 'Ergonomic Wireless Mouse with Silent Clicks',
-    slug: 'ergonomic-wireless-mouse',
+    title: 'Logitech G PRO X Superlight Wireless Gaming Mouse',
+    slug: 'logitech-g-pro-x-superlight',
     category: 'Peripherals',
-    price: 34.99,
-    original_price: 44.99,
-    short_description: 'Comfortable hand grip, quiet click buttons, and adjustable cursor speed.',
-    description: 'Designed to fit naturally in your hand and reduce wrist strain during long work days. Features quiet clicking buttons so you do not disturb coworkers, plus an adjustable DPI button to change cursor speed on the fly. Works instantly with a small USB receiver.',
-    image: 'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=800&q=80',
+    price: 10995,
+    original_price: 13995,
+    short_description: 'Ultra-lightweight under 63g, HERO 25K sensor, Lightspeed wireless, and zero-additive PTFE feet.',
+    description: 'Meticulously engineered in collaboration with top esports pros. The Logitech G PRO X Superlight weighs less than 63 grams without compromising structural integrity or responsiveness. Powered by the ultra-precise HERO 25K sensor and pro-grade LIGHTSPEED wireless.',
+    image: 'images/products/logitech_gprox_mouse.jpg',
     gallery: JSON.stringify([
-      'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?auto=format&fit=crop&w=800&q=80'
+      'images/products/logitech_gprox_mouse.jpg',
+      'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=800&q=80'
     ]),
     stock: 22,
-    rating: 4.6,
-    reviews_count: 29,
+    rating: 4.9,
+    reviews_count: 49,
     featured: 0,
     specs: JSON.stringify({
-      'Sensor': 'Optical Sensor (800 / 1200 / 1600 DPI)',
-      'Buttons': '6 Buttons (Silent Left/Right clicks)',
-      'Connection': '2.4GHz Wireless USB Nano Receiver',
-      'Battery': '1x AA Battery (up to 12 months life)',
-      'Weight': '85g'
+      'Brand': 'Logitech G',
+      'Model': 'PRO X SUPERLIGHT',
+      'Weight': '< 63 grams',
+      'Sensor': 'HERO 25K (100 - 25,600 DPI)',
+      'Wireless': 'LIGHTSPEED 1ms Report Rate',
+      'Battery Life': 'Up to 70 hours constant motion',
+      'Feet': 'Zero-Additive Large PTFE Glides'
     })
   },
   {
-    title: '1080p Full HD Webcam with Microphone',
-    slug: '1080p-full-hd-webcam',
+    title: 'Logitech C920 HD Pro Webcam (Full HD 1080p)',
+    slug: 'logitech-c920-hd-pro-webcam',
     category: 'Peripherals',
-    price: 45.99,
-    original_price: 59.99,
-    short_description: 'Crisp video and clear audio for Zoom, Teams, and online classes.',
-    description: 'Upgrade your video calls with clear 1080p high definition. This webcam automatically adjusts to your room lighting so your picture looks bright and natural. Includes a built-in microphone with background noise reduction and a sliding privacy cover for peace of mind.',
-    image: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=800&q=80',
+    price: 6995,
+    original_price: 8995,
+    short_description: 'Full HD 1080p video, glass lens with autofocus, dual stereo mics, and auto light correction.',
+    description: 'Look your best on every video call. Logitech C920 delivers remarkably crisp and detailed Full HD 1080p video at 30 fps. Equipped with automatic HD light correction (RightLight 2) and dual stereo microphones on both sides of the lens to capture natural, realistic audio.',
+    image: 'images/products/logitech_c920.jpg',
     gallery: JSON.stringify([
-      'https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=800&q=80'
+      'images/products/logitech_c920.jpg',
+      'https://images.unsplash.com/photo-1585060544812-6b45742d762f?auto=format&fit=crop&w=800&q=80'
     ]),
     stock: 14,
-    rating: 4.5,
-    reviews_count: 27,
+    rating: 4.7,
+    reviews_count: 37,
     featured: 0,
     specs: JSON.stringify({
-      'Video Resolution': '1080p Full HD @ 30fps',
-      'Microphone': 'Built-in noise reducing microphone',
-      'Mounting': 'Universal monitor clip and tripod mount',
-      'Privacy': 'Built-in sliding privacy shutter',
-      'Plug and Play': 'USB 2.0 (No driver needed)'
+      'Brand': 'Logitech',
+      'Model': 'C920 HD Pro',
+      'Resolution': '1080p/30fps - 720p/30fps',
+      'Lens': 'Full HD Glass with Autofocus',
+      'Field of View': '78° Diagonal',
+      'Microphones': 'Dual stereo omnidirectional mics',
+      'Connection': 'USB-A Plug and Play'
     })
   },
   {
-    title: '3-in-1 Fast Wireless Charging Station',
-    slug: '3in1-wireless-charging-station',
+    title: 'Anker 3-in-1 MagSafe Wireless Charging Stand',
+    slug: 'anker-3in1-magsafe-charging-stand',
     category: 'Accessories',
-    price: 39.99,
-    original_price: 49.99,
-    short_description: 'Charges phone, watch, and wireless earbuds on a single neat stand.',
-    description: 'Clean up your desk or nightstand. This stand charges your smartphone, smartwatch, and wireless earbuds all at once using one wall plug. Includes built-in safety features to protect your devices from overcharging and overheating.',
-    image: 'https://images.unsplash.com/photo-1622445262464-84b1456045b6?auto=format&fit=crop&w=800&q=80',
+    price: 6499,
+    original_price: 8499,
+    short_description: 'Official 15W high-speed MagSafe charging for iPhone, Apple Watch stand, and AirPods base.',
+    description: 'Charge your Apple ecosystem all at once with Anker 3-in-1 charging stand. Enjoy official 15W ultra-fast wireless charging for iPhone via magnetic MagSafe, a dedicated charging arm for Apple Watch, and a soft-touch pad on the weighted base for your AirPods.',
+    image: 'images/products/anker_magsafe_stand.jpg',
     gallery: JSON.stringify([
+      'images/products/anker_magsafe_stand.jpg',
       'https://images.unsplash.com/photo-1622445262464-84b1456045b6?auto=format&fit=crop&w=800&q=80'
     ]),
     stock: 35,
-    rating: 4.7,
-    reviews_count: 49,
+    rating: 4.8,
+    reviews_count: 51,
     featured: 1,
     specs: JSON.stringify({
-      'Charging Output': '15W Phone + 5W Watch + 5W Earbuds',
-      'Input': 'USB-C (Fast charging adapter included)',
-      'Safety': 'Over-charge and temperature protection',
-      'Compatibility': 'Qi-enabled phones and earbuds'
+      'Brand': 'Anker',
+      'Output': '15W MagSafe Phone + 5W Apple Watch + 5W AirPods',
+      'Safety': 'Anker ActiveShield 2.0 Temperature Protection',
+      'Input': 'USB-C Fast Charging (Power adapter & cable included)',
+      'Compatibility': 'iPhone 12-16 series, Apple Watch (all series), AirPods Pro/3/2'
     })
   },
   {
-    title: 'Waterproof Portable Bluetooth Speaker',
-    slug: 'waterproof-portable-bluetooth-speaker',
+    title: 'JBL Flip 6 Waterproof Portable Bluetooth Speaker',
+    slug: 'jbl-flip-6-bluetooth-speaker',
     category: 'Audio',
-    price: 49.99,
-    original_price: 64.99,
-    short_description: 'Rich sound with deep bass, IPX7 waterproof, and 18-hour battery.',
-    description: 'Take your tunes anywhere. This compact speaker delivers loud, room-filling sound with strong bass. It is fully waterproof, so you can safely use it by the pool, at the beach, or in the shower. A tough exterior protects it from accidental drops.',
-    image: 'https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=800&q=80',
+    price: 8999,
+    original_price: 13999,
+    short_description: 'Bold JBL Original Pro Sound, 2-way speaker system, IP67 waterproof/dustproof, and 12h playtime.',
+    description: 'Big sound meets go-anywhere portability. The JBL Flip 6 2-way speaker system delivers loud, crystal-clear audio with dual passive radiators for deep bass. IP67 waterproof and dustproof means you can bring it to the pool, beach, park, or trail in any weather.',
+    image: 'images/products/jbl_flip_6.jpg',
     gallery: JSON.stringify([
+      'images/products/jbl_flip_6.jpg',
       'https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=800&q=80'
     ]),
     stock: 19,
@@ -195,102 +209,259 @@ const seedProducts = [
     reviews_count: 45,
     featured: 0,
     specs: JSON.stringify({
-      'Battery Playtime': 'Up to 18 Hours',
-      'Waterproof Rating': 'IPX7 (Safe in water up to 1 meter)',
-      'Wireless Range': '60 feet Bluetooth 5.0',
-      'Audio Output': '20W stereo sound'
+      'Brand': 'JBL',
+      'Model': 'Flip 6',
+      'Output Power': '20W RMS Woofer + 10W RMS Tweeter (30W Total)',
+      'Waterproof Rating': 'IP67 Waterproof & Dustproof',
+      'Battery Life': 'Up to 12 Hours (USB-C Fast Charge)',
+      'Features': 'PartyBoost Stereo Pairing, JBL Portable App'
     })
   },
   {
-    title: '20,000mAh Fast-Charging Power Bank',
-    slug: '20000mah-fast-charging-power-bank',
+    title: 'Anker 737 Power Bank (PowerCore 24K, 140W Fast Charging)',
+    slug: 'anker-737-power-bank-24k',
     category: 'Accessories',
-    price: 42.99,
-    original_price: 54.99,
-    short_description: 'Charges your phone up to 4 times with dual fast USB output ports.',
-    description: 'Never run out of phone battery when traveling, commuting, or outdoors. This reliable 20,000mAh power bank can charge an iPhone or Android phone up to 4 times. Features dual USB output ports so you and a friend can charge simultaneously.',
-    image: 'https://images.unsplash.com/photo-1609592807664-8454746513f3?auto=format&fit=crop&w=800&q=80',
+    price: 9999,
+    original_price: 13999,
+    short_description: '24,000mAh capacity, ultra-powerful 140W two-way fast charging, and smart digital color display.',
+    description: 'Equipped with the latest Power Delivery 3.1 and bi-directional technology to quickly recharge the portable charger or deliver a 140W ultra-powerful charge to high-end laptops, MacBooks, tablets, and smartphones. The smart digital OLED screen shows real-time output/input wattage and estimated time to full recharge.',
+    image: 'images/products/anker_737_powerbank.jpg',
     gallery: JSON.stringify([
-      'https://images.unsplash.com/photo-1609592807664-8454746513f3?auto=format&fit=crop&w=800&q=80'
+      'images/products/anker_737_powerbank.jpg',
+      'https://images.unsplash.com/photo-1609592426508-410a6d59ce6b?auto=format&fit=crop&w=800&q=80'
     ]),
     stock: 28,
-    rating: 4.7,
-    reviews_count: 36,
+    rating: 4.9,
+    reviews_count: 42,
     featured: 1,
     specs: JSON.stringify({
-      'Capacity': '20,000mAh (Airline approved)',
-      'Ports': '1x USB-C (Input/Output), 2x USB-A (Output)',
-      'Fast Charge': '18W Quick Charge 3.0',
-      'Weight': '390g'
+      'Brand': 'Anker',
+      'Model': '737 Power Bank (PowerCore 24K)',
+      'Capacity': '24,000mAh (86.4Wh - TSA Airline Approved)',
+      'Total Output': '140W Max (PD 3.1)',
+      'Ports': '2x USB-C (140W In/Out) + 1x USB-A (18W)',
+      'Display': 'Smart Digital Color OLED Status Screen',
+      'Weight': '630g'
     })
   },
   {
-    title: 'LED Desk Monitor Light Bar',
-    slug: 'led-desk-monitor-light-bar',
+    title: 'BenQ ScreenBar LED Monitor Light Bar (Auto-Dimming)',
+    slug: 'benq-screenbar-monitor-light',
     category: 'Smart Home',
-    price: 35.99,
-    original_price: 45.99,
-    short_description: 'Clips on top of monitor to illuminate your desk without screen glare.',
-    description: 'Save desk space and protect your eyes during late-night work or study sessions. This light bar clips securely on top of your monitor and casts light downward onto your keyboard and papers without reflecting on the screen. Easily change between warm and cool lighting with touch controls.',
-    image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80',
+    price: 9990,
+    original_price: 12990,
+    short_description: 'Patented asymmetrical optical design with zero screen glare and built-in auto-dimming ambient sensor.',
+    description: 'The pioneer of desk light bars. BenQ ScreenBar mounts directly on top of your monitor with a weighted clip, taking zero desk space. Its patented asymmetrical optical design illuminates your keyboard, notes, and workspace without creating any glare or reflection on the screen.',
+    image: 'images/products/benq_screenbar.jpg',
     gallery: JSON.stringify([
-      'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80'
+      'images/products/benq_screenbar.jpg',
+      'https://images.unsplash.com/photo-1593642632823-8f785ba67e45?auto=format&fit=crop&w=800&q=80'
     ]),
     stock: 20,
-    rating: 4.6,
-    reviews_count: 31,
+    rating: 4.8,
+    reviews_count: 36,
     featured: 0,
     specs: JSON.stringify({
-      'Mounting': 'Clips directly to monitor (Fits screens 0.5cm - 3cm thick)',
-      'Color Temperature': '3000K (Warm) to 6000K (Cool White)',
-      'Power Source': 'USB-C cable (Plugs into PC or wall adapter)',
-      'Controls': 'Touch sensor for brightness and color'
+      'Brand': 'BenQ',
+      'Model': 'ScreenBar',
+      'Sensor': 'Built-in Ambient Light Sensor for Auto-Dimming',
+      'Color Temperature': '8 Levels Adjustable (2700K Warm to 6500K Cool White)',
+      'Brightness': '15 Levels Adjustable with Touch Controls',
+      'Power': 'USB-A 5V/1A (Plugs into monitor or PC)',
+      'Mounting': 'Patented counterweight clamp (fits monitors 1-3cm thick)'
     })
   },
   {
-    title: 'Water-Resistant Everyday Laptop Backpack',
-    slug: 'water-resistant-laptop-backpack',
+    title: 'Case Logic 15.6" Laptop Backpack (VNB-217)',
+    slug: 'case-logic-laptop-backpack',
     category: 'Accessories',
-    price: 54.99,
-    original_price: 69.99,
-    short_description: 'Fits laptops up to 15.6 inches with multiple organizer pockets.',
-    description: 'A durable and comfortable backpack for college students, office workers, and travelers. Includes a dedicated padded laptop compartment, water bottle side pockets, and durable water-resistant fabric that protects your gear on rainy days.',
-    image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80',
+    price: 2499,
+    original_price: 3499,
+    short_description: 'Dedicated 3/4 zippered laptop compartment for 15.6" laptops, front organizer, and mesh bottle pockets.',
+    description: 'Streamlined styling and smartly placed features add up to a minimalist footprint. Dedicated, 3/4 zip laptop compartment holds up to 15.6-inch widescreen laptops. Expansive interior storage holds books, files, and cables, while the front Speed Pocket keeps your phone and keys within quick reach.',
+    image: 'images/products/caselogic_backpack.jpg',
     gallery: JSON.stringify([
+      'images/products/caselogic_backpack.jpg',
       'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80'
     ]),
     stock: 16,
-    rating: 4.8,
+    rating: 4.7,
     reviews_count: 42,
     featured: 0,
     specs: JSON.stringify({
-      'Fits Laptop Size': 'Up to 15.6-inch laptop',
-      'Material': 'Water-resistant Oxford fabric',
-      'Pockets': 'Main compartment, front organizer pocket, 2 side bottle pockets',
-      'Weight': '650g'
+      'Brand': 'Case Logic',
+      'Model': 'VNB-217',
+      'Laptop Compatibility': 'Up to 15.6-inch laptops',
+      'Material': 'Durable water-resistant Dobby Nylon',
+      'Volume': '25 Liters',
+      'Pockets': 'Laptop sleeve, main compartment, quick-access front Speed Pocket, 2 mesh bottle pockets',
+      'Weight': '560g'
     })
   },
   {
-    title: 'Lightweight Fitness Tracker Band',
-    slug: 'lightweight-fitness-tracker-band',
+    title: 'Xiaomi Mi Smart Band 5 (1.1" AMOLED Display)',
+    slug: 'xiaomi-mi-smart-band-5',
     category: 'Wearables',
-    price: 29.99,
-    original_price: 39.99,
-    short_description: 'Simple daily step counter, sleep tracker, and calorie monitor.',
-    description: 'A simple, no-fuss fitness band that is comfortable enough to wear day and night. It counts your steps, calculates calories burned, tracks your sleep cycles, and vibrates when you get a phone call. The battery lasts up to two weeks on a single charge.',
-    image: 'https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?auto=format&fit=crop&w=800&q=80',
+    price: 2499,
+    original_price: 2999,
+    short_description: 'Dynamic 1.1" AMOLED color screen, magnetic charging, 14-day battery, and 11 professional sports modes.',
+    description: 'Track your daily fitness, steps, heart rate, and sleep quality with the Xiaomi Mi Smart Band 5. Features an upgraded 1.1-inch dynamic color display with over 65 custom dial faces, 11 sports modes including yoga and rowing machine, 5ATM water resistance, and convenient magnetic snap-on charging.',
+    image: 'images/products/xiaomi_smartband5.jpg',
     gallery: JSON.stringify([
+      'images/products/xiaomi_smartband5.jpg',
       'https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?auto=format&fit=crop&w=800&q=80'
     ]),
     stock: 32,
-    rating: 4.5,
+    rating: 4.6,
     reviews_count: 35,
     featured: 0,
     specs: JSON.stringify({
-      'Battery Life': 'Up to 14 Days',
-      'Functions': 'Step counter, Sleep tracking, Call alerts, Heart rate',
-      'Waterproof': 'Waterproof for handwashing and rain',
-      'Weight': '22g'
+      'Brand': 'Xiaomi',
+      'Model': 'Mi Smart Band 5',
+      'Display': '1.1-inch Color AMOLED (126 x 294 pixels)',
+      'Battery Life': '14-Day Battery Life (Magnetic Snap Charging)',
+      'Water Resistance': '5ATM Water Resistant (Up to 50 meters)',
+      'Tracking': '24/7 Heart Rate, Sleep Analysis, Stress Monitoring, PAI Score',
+      'Weight': '11.9g'
+    })
+  },
+  {
+    title: 'Apple iPhone 15 Pro (128GB, Natural Titanium)',
+    slug: 'apple-iphone-15-pro',
+    category: 'Phones',
+    price: 129800,
+    original_price: 134900,
+    short_description: 'Aerospace-grade titanium, A17 Pro chip, customizable Action button, and 48MP Pro camera system.',
+    description: 'Forged in titanium. Apple iPhone 15 Pro features a strong and lightweight aerospace-grade titanium design with textured matte-glass back. Powered by the groundbreaking A17 Pro chip for next-generation mobile gaming. Capture phenomenal detail with the 48MP Main camera, 3x Telephoto lens, and versatile Action button.',
+    image: 'images/products/apple_iphone_15_pro.jpg',
+    gallery: JSON.stringify([
+      'images/products/apple_iphone_15_pro.jpg',
+      'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=80'
+    ]),
+    stock: 15,
+    rating: 4.9,
+    reviews_count: 88,
+    featured: 1,
+    specs: JSON.stringify({
+      'Brand': 'Apple',
+      'Model': 'iPhone 15 Pro',
+      'Display': '6.1-inch Super Retina XDR with ProMotion 120Hz & Always-On',
+      'Processor': 'A17 Pro chip with 6-core GPU and hardware ray tracing',
+      'Storage': '128GB NVMe',
+      'Camera': 'Pro Camera System (48MP Main + 12MP Ultra-Wide + 12MP 3x Telephoto)',
+      'Connector': 'USB-C with USB 3 speeds (up to 10Gbps)',
+      'Durability': 'Ceramic Shield front, IP68 water resistance'
+    })
+  },
+  {
+    title: 'Apple Studio Display 27" 5K Retina Monitor',
+    slug: 'apple-studio-display-27-5k',
+    category: 'Monitors',
+    price: 149900,
+    original_price: 159900,
+    short_description: '27-inch 5K Retina display, 12MP camera with Center Stage, 3-mic array, and 6 speakers with Spatial Audio.',
+    description: 'A sight to be beholden. Apple Studio Display draws you in from the moment you turn it on with 14.7 million pixels of 5K Retina brilliance, 600 nits of brightness, and P3 wide color. Includes a 12MP Ultra Wide camera with Center Stage, a studio-quality three-mic array, and a six-speaker sound system with Spatial Audio.',
+    image: 'images/products/apple_studio_display.jpg',
+    gallery: JSON.stringify([
+      'images/products/apple_studio_display.jpg',
+      'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=800&q=80'
+    ]),
+    stock: 12,
+    rating: 4.9,
+    reviews_count: 54,
+    featured: 1,
+    specs: JSON.stringify({
+      'Brand': 'Apple',
+      'Model': 'Studio Display (Standard Glass, Tilt Stand)',
+      'Panel Size': '27-inch 5K Retina (5120 x 2880 at 218 ppi)',
+      'Brightness': '600 nits brightness, 1 billion colors, P3 wide color gamut',
+      'Camera': '12MP Ultra Wide camera with 122° field of view & Center Stage',
+      'Audio': 'High-fidelity 6-speaker system with force-cancelling woofers',
+      'Ports': '1x Thunderbolt 3 (96W host charging) + 3x USB-C (up to 10Gbps)'
+    })
+  },
+  {
+    title: 'Samsung 55" Crystal 4K UHD Smart TV (55DUE70)',
+    slug: 'samsung-55-crystal-4k-smart-tv',
+    category: 'TVs',
+    price: 43990,
+    original_price: 64900,
+    short_description: 'Vivid Crystal Processor 4K, PurColor lifelike picture, HDR10+, OTS Lite, and Tizen OS with SmartThings.',
+    description: 'Experience vivid, true-to-life colors and stunning 4K clarity with the Samsung 55" Crystal UHD TV. Powered by the intelligent Crystal Processor 4K that upscales all your favorite movies and shows. Enjoy Q-Symphony sound synchronization, Motion Xcelerator for smooth sports/gaming, and built-in streaming apps like Netflix, Prime Video, and Apple TV.',
+    image: 'images/products/samsung_55_smart_tv.jpg',
+    gallery: JSON.stringify([
+      'images/products/samsung_55_smart_tv.jpg',
+      'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=800&q=80'
+    ]),
+    stock: 8,
+    rating: 4.9,
+    reviews_count: 67,
+    featured: 1,
+    specs: JSON.stringify({
+      'Brand': 'Samsung',
+      'Model': 'Crystal 4K UHD (55")',
+      'Screen Size': '55 inches (138 cm)',
+      'Resolution': '3840 x 2160 (4K UHD) with PurColor & HDR10+',
+      'Processor': 'Crystal Processor 4K with 4K Upscaling',
+      'Sound': '20W 2CH Speakers with Object Tracking Sound (OTS Lite) & Q-Symphony',
+      'Operating System': 'Samsung Tizen OS with Voice Assistants',
+      'Connectivity': '3x HDMI, 1x USB, Wi-Fi 5, Bluetooth 5.2, Optical Audio Out'
+    })
+  },
+  {
+    title: 'Apple iPad Pro 11" with Apple Pencil (Liquid Retina Display)',
+    slug: 'apple-ipad-pro-11-liquid-retina',
+    category: 'Tablets',
+    price: 81900,
+    original_price: 89900,
+    short_description: '11-inch Liquid Retina display with ProMotion 120Hz, Apple M2 chip, and magnetic Apple Pencil support.',
+    description: 'Astonishing performance, incredibly advanced displays, superfast wireless connectivity, and next-level Apple Pencil capabilities. Powered by the Apple M2 chip with 8-core CPU and 10-core GPU, the iPad Pro is the ultimate portable digital canvas for artists, students, and professionals.',
+    image: 'images/products/apple_ipad_pro.jpg',
+    gallery: JSON.stringify([
+      'images/products/apple_ipad_pro.jpg',
+      'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=800&q=80'
+    ]),
+    stock: 18,
+    rating: 4.8,
+    reviews_count: 51,
+    featured: 1,
+    specs: JSON.stringify({
+      'Brand': 'Apple',
+      'Model': 'iPad Pro 11-inch (Wi-Fi, 128GB)',
+      'Display': '11-inch Liquid Retina with ProMotion (120Hz) & True Tone',
+      'Processor': 'Apple M2 Chip with 8-Core CPU & 10-Core GPU',
+      'Pen Support': 'Apple Pencil (2nd Gen) with magnetic charging & hover',
+      'Cameras': '12MP Wide + 10MP Ultra-Wide rear with LiDAR Scanner; 12MP TrueDepth front',
+      'Security': 'Face ID facial recognition',
+      'Connector': 'Thunderbolt / USB 4'
+    })
+  },
+  {
+    title: 'Sony PlayStation 5 Console (1TB SSD, DualSense Controller)',
+    slug: 'sony-playstation-5-console',
+    category: 'Gaming',
+    price: 49990,
+    original_price: 54990,
+    short_description: 'Ultra-fast 1TB SSD, ray tracing, 4K gaming up to 120fps, 3D audio, and DualSense haptic feedback.',
+    description: 'Experience lightning-fast loading with an ultra-high speed 1TB SSD, deeper immersion with support for haptic feedback, adaptive triggers, and 3D Audio, and an all-new generation of incredible PlayStation games. Enjoy smooth and fluid high frame rate gameplay at up to 120fps for compatible games on 4K displays.',
+    image: 'images/products/sony_ps5_console.jpg',
+    gallery: JSON.stringify([
+      'images/products/sony_ps5_console.jpg',
+      'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=800&q=80'
+    ]),
+    stock: 10,
+    rating: 5.0,
+    reviews_count: 98,
+    featured: 1,
+    specs: JSON.stringify({
+      'Brand': 'Sony Interactive Entertainment',
+      'Model': 'PlayStation 5 (CFI-2000 Slim)',
+      'Storage': '1TB Custom Ultra-High Speed NVMe SSD (Expandable M.2 slot)',
+      'Graphics': '10.3 TFLOPS, AMD RDNA 2-based GPU with Hardware Ray Tracing',
+      'Video Output': 'HDMI 2.1 support for 4K 120Hz TVs, 8K TVs, VRR',
+      'Audio': 'Tempest 3D AudioTech',
+      'Controller': 'DualSense Wireless Controller with Haptic Feedback & Dynamic Triggers',
+      'Included in Box': 'PS5 Console, DualSense Controller, 1TB SSD, HDMI Cable, Power Cord'
     })
   }
 ];
@@ -299,17 +470,17 @@ const sampleReviews = [
   {
     user_name: 'David Miller',
     rating: 5,
-    comment: 'Really happy with this purchase. Sound is great and it arrived in just two days.'
+    comment: 'Really happy with this purchase. Outstanding authentic quality and it arrived in just two days.'
   },
   {
     user_name: 'Sarah Jenkins',
     rating: 5,
-    comment: 'Good build quality and works exactly as described. Well worth the price!'
+    comment: 'Exceptional build quality and works exactly as described. Well worth the price!'
   },
   {
     user_name: 'Michael Chang',
-    rating: 4,
-    comment: 'Comfortable to use for long hours. Battery lasts all week for me.'
+    rating: 5,
+    comment: 'Comfortable to use for long hours. Premium finish and battery lasts as advertised.'
   },
   {
     user_name: 'Emily Watson',
@@ -324,7 +495,7 @@ const seedDatabase = async () => {
   console.log('🌱 Checking database...');
 
   // 1. Seed Demo User
-  const existingUser = await get('SELECT * FROM users WHERE email = ?', ['demo@codealpha.com']);
+  const existingUser = await get('SELECT * FROM users WHERE email = ?', ['demo@techstore.com']);
   let demoUserId;
   if (!existingUser) {
     const salt = await bcrypt.genSalt(10);
@@ -332,21 +503,24 @@ const seedDatabase = async () => {
 
     const userResult = await run(
       `INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)`,
-      ['Alex Mercer', 'demo@codealpha.com', hashedPassword, 'customer']
+      ['Alex Mercer', 'demo@techstore.com', hashedPassword, 'customer']
     );
     demoUserId = userResult.id;
-    console.log('👤 Created demo user: demo@codealpha.com / password123');
+    console.log('👤 Created demo user: demo@techstore.com / password123');
   } else {
     demoUserId = existingUser.id;
   }
 
-  // 2. Clear old products to refresh with human wording if needed
+  // 2. Clear old products to refresh catalog
   await run('DELETE FROM products');
   await run('DELETE FROM reviews');
   await run('DELETE FROM order_items');
   await run('DELETE FROM orders');
+  try {
+    await run("DELETE FROM sqlite_sequence WHERE name IN ('products', 'reviews', 'order_items', 'orders')");
+  } catch (e) {}
 
-  console.log('📦 Seeding updated human product catalog...');
+  console.log('📦 Seeding updated product catalog in Indian Rupees (₹) with authentic brand names & matching images...');
   for (const prod of seedProducts) {
     const prodResult = await run(
       `INSERT INTO products (title, slug, category, price, original_price, short_description, description, image, gallery, stock, rating, reviews_count, featured, specs)
@@ -388,21 +562,21 @@ const seedDatabase = async () => {
       sampleOrderNumber,
       demoUserId,
       'Alex Mercer',
-      'demo@codealpha.com',
-      '+1 (555) 349-8291',
+      'demo@techstore.com',
+      '+91 98765 43210',
       JSON.stringify({
-        address: '742 Evergreen Terrace',
-        city: 'Springfield',
-        state: 'OR',
-        zip: '97477',
-        country: 'United States'
+        address: '42 MG Road, Indiranagar',
+        city: 'Bengaluru',
+        state: 'Karnataka',
+        zip: '560038',
+        country: 'India'
       }),
       'credit_card',
-      129.99,
+      19999,
       0,
-      10.40,
+      3599.82,
       0.00,
-      140.39,
+      23598.82,
       'Shipped'
     ]
   );
@@ -413,15 +587,15 @@ const seedDatabase = async () => {
     [
       orderRes.id,
       1,
-      'Wireless Noise-Cancelling Headphones',
-      129.99,
+      'Sony WH-1000XM4 Wireless Noise-Cancelling Headphones',
+      19999,
       1,
-      'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80',
-      129.99
+      'images/products/sony_wh1000xm4.jpg',
+      19999
     ]
   );
 
-  console.log(`✅ Seeded ${seedProducts.length} human-friendly products.`);
+  console.log(`✅ Seeded ${seedProducts.length} authentic brand-name products successfully.`);
   console.log('✨ Database seeding complete.');
 };
 

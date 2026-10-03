@@ -1,6 +1,6 @@
-# CodeAlpha_EcommerceStore — Simple E-Commerce Store
+# TechStore — Modern E-Commerce Store
 
-A full-stack, clean, and modern e-commerce web application built for **CodeAlpha Internship — TASK 1: Simple E-commerce Store**.
+A full-stack, clean, and modern electronics and gadgets e-commerce web application with realistic product catalog, multi-category browsing, real-time cart, and checkout.
 
 ---
 
@@ -8,8 +8,8 @@ A full-stack, clean, and modern e-commerce web application built for **CodeAlpha
 
 - **Product Listings & Catalog:**
   - Real-time search by product title and description
-  - Category filtering (Audio, Wearables, Keyboards & Mice, Desk & Home, Accessories)
-  - Price range slider ($30 - $300)
+  - Multi-category filtering (Phones, Monitors, TVs, Tablets, Consoles, Audio, Wearables, Peripherals, Accessories)
+  - Price range slider (₹1,000 - ₹100,000)
   - Sorting options (Featured, Price: Low to High, Price: High to Low, Customer Rating, Newest)
   - In-stock availability toggle
 - **Product Details:**
@@ -20,9 +20,9 @@ A full-stack, clean, and modern e-commerce web application built for **CodeAlpha
 - **Shopping Cart:**
   - Slide-out responsive cart drawer
   - Quantity adjustments (`+` / `-`) and instant item removal
-  - Free shipping progress bar (Free shipping on orders over $50)
-  - Discount coupon support (use `CODEALPHA15` for 15% off)
-  - Automatic subtotal, tax (8%), shipping, and total calculation
+  - Free shipping progress bar (Free shipping on orders over ₹499)
+  - Discount coupon support (use `TECH15` for 15% off)
+  - Automatic subtotal, GST (18%), shipping, and total calculation
 - **Order Processing & Checkout:**
   - Multi-step checkout (1. Shipping Address, 2. Payment Method, 3. Review)
   - Payment simulation (Credit/Debit Card with live card preview, PayPal/UPI, Cash on Delivery)
@@ -56,7 +56,7 @@ Simply double-click `start.bat` or `run.bat` in the project root. It will start 
 ### Option 2: Using the Terminal
 1. Open terminal inside the project folder:
    ```bash
-   cd "CodeAlpha_EcommerceStore"
+   cd "TechStore"
    ```
 2. Install dependencies (if not already installed):
    ```bash
@@ -78,7 +78,7 @@ Simply double-click `start.bat` or `run.bat` in the project root. It will start 
 ## 👤 Demo Login Credentials
 
 For quick evaluation and testing:
-- **Email:** `demo@codealpha.com`
+- **Email:** `demo@techstore.com`
 - **Password:** `password123`
 
 *(You can also click the "Auto-Fill" button inside the Sign In modal to populate these credentials instantly).*
@@ -95,27 +95,8 @@ For quick evaluation and testing:
 
 ---
 
-## 📤 How to Push to GitHub
-
-To upload this complete project to GitHub under repository name **CodeAlpha_EcommerceStore**:
-
-1. Create a new repository on [GitHub](https://github.com/new) named:
-   ```
-   CodeAlpha_EcommerceStore
-   ```
-2. Run these commands in your project folder:
-   ```bash
-   git add .
-   git commit -m "feat: complete e-commerce store with express, sqlite, and vanilla frontend"
-   git branch -M main
-   git remote add origin https://github.com/<YOUR_GITHUB_USERNAME>/CodeAlpha_EcommerceStore.git
-   git push -u origin main
-   ```
-
----
-
 ## 👨‍💻 Author
 
 **Pratyay Pal**  
-CodeAlpha Web Development Intern  
+Full-Stack Developer  
 Email: pratyaypal54@gmail.com
