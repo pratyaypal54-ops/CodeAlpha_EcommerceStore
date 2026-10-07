@@ -72,7 +72,7 @@ const startServer = async () => {
     // Auto-seed database if empty
     await seedDatabase();
 
-    app.listen(PORT, () => {
+    app.listen(PORT, '0.0.0.0', () => {
       console.log('====================================================');
       console.log(`🚀 TechStore Server is running!`);
       console.log(`📡 Local URL: http://localhost:${PORT}`);
