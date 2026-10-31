@@ -1,15 +1,19 @@
 /**
  * TechStore - State Management
- * Handles Cart items, Wishlist, Coupons, and LocalStorage caching.
+ * Handles Cart items, Variants, Wishlist, Coupons, User/Seller role, and LocalStorage caching.
  */
 
 const State = {
   user: null,
+  token: null,
   cart: [],
   wishlist: [],
   activeCoupon: null,
+  geminiApiKey: '',
+  selectedProductForAI: null,
   filters: {
     category: 'All',
+    sellerId: null,
     search: '',
     maxPrice: 200000,
     sort: 'featured',
@@ -18,6 +22,12 @@ const State = {
 
   init() {
     try {
+      const savedUser = localStorage.getItem('techstore_user');
+      if (savedUser) this.user = JSON.parse(savedUser);
+
+      const savedToken = localStorage.getItem('techstore_token');
+      if (savedToken) this.token = savedToken;
+
       const savedCart = localStorage.getItem('techstore_cart');
       if (savedCart) this.cart = JSON.parse(savedCart);
 
@@ -26,30 +36,76 @@ const State = {
 
       const savedCoupon = localStorage.getItem('techstore_coupon');
       if (savedCoupon) this.activeCoupon = JSON.parse(savedCoupon);
+
+      const savedGeminiKey = localStorage.getItem('techstore_gemini_key');
+      if (savedGeminiKey) this.geminiApiKey = savedGeminiKey;
     } catch (e) {
-      console.warn('Could not read saved cart state:', e);
+      console.warn('Could not read saved state:', e);
     }
   },
 
-  // Cart operations
-  addToCart(product, quantity = 1) {
-    const existingIndex = this.cart.findIndex(item => item.id === product.id);
+  // Auth & Seller state
+  setUser(user, token) {
+    this.user = user;
+    if (token) this.token = token;
+    localStorage.setItem('techstore_user', JSON.stringify(user));
+    if (token) localStorage.setItem('techstore_token', token);
+    window.dispatchEvent(new CustomEvent('techstore:auth_changed', { detail: { user } }));
+  },
+
+  logout() {
+    this.user = null;
+    this.token = null;
+    localStorage.removeItem('techstore_user');
+    localStorage.removeItem('techstore_token');
+    window.dispatchEvent(new CustomEvent('techstore:auth_changed', { detail: { user: null } }));
+  },
+
+  isLoggedIn() {
+    return Boolean(this.user && (this.token || this.user.email));
+  },
+
+  isSeller() {
+    return Boolean(this.user && this.user.role === 'seller');
+  },
+
+  setGeminiKey(key) {
+    this.geminiApiKey = (key || '').trim();
+    if (this.geminiApiKey) {
+      localStorage.setItem('techstore_gemini_key', this.geminiApiKey);
+    } else {
+      localStorage.removeItem('techstore_gemini_key');
+    }
+  },
+
+  // Cart operations with Variant support
+  addToCart(product, quantity = 1, selectedVariant = null) {
+    const variantKey = selectedVariant || 'Default';
+    const cartItemId = `${product.id}__${variantKey}`;
+
+    const existingIndex = this.cart.findIndex(item => item.cartItemId === cartItemId || (!item.cartItemId && item.id === product.id && (item.selectedVariant || 'Default') === variantKey));
 
     if (existingIndex > -1) {
       const existing = this.cart[existingIndex];
       const newQty = existing.quantity + quantity;
-      if (product.stock && newQty > product.stock) {
-        throw new Error(`Only ${product.stock} items left in stock.`);
+      if (product.stock !== undefined && newQty > product.stock) {
+        throw new Error(product.stock === 0 ? `Sorry, "${product.title}" is out of stock.` : `Only ${product.stock} items left in stock.`);
       }
       existing.quantity = newQty;
     } else {
+      if (product.stock === 0) {
+        throw new Error(`"${product.title}" is currently out of stock.`);
+      }
       this.cart.push({
+        cartItemId,
         id: product.id,
         title: product.title,
         price: product.price,
         image: product.image,
         category: product.category,
-        stock: product.stock || 20,
+        stock: product.stock !== undefined ? product.stock : 20,
+        selectedVariant: selectedVariant || null,
+        seller_name: product.seller ? product.seller.name : (product.seller_name || 'Apex Tech & Audio'),
         quantity: Math.max(1, quantity)
       });
     }
@@ -58,14 +114,14 @@ const State = {
     return this.cart;
   },
 
-  updateCartQuantity(productId, quantity) {
-    const item = this.cart.find(i => i.id === productId);
+  updateCartQuantity(cartItemIdOrProductId, quantity) {
+    const item = this.cart.find(i => i.cartItemId === cartItemIdOrProductId || i.id === cartItemIdOrProductId);
     if (!item) return;
 
     if (quantity <= 0) {
-      this.removeFromCart(productId);
+      this.removeFromCart(cartItemIdOrProductId);
     } else {
-      if (item.stock && quantity > item.stock) {
+      if (item.stock !== undefined && quantity > item.stock) {
         throw new Error(`Maximum available stock is ${item.stock}`);
       }
       item.quantity = quantity;
@@ -73,8 +129,8 @@ const State = {
     }
   },
 
-  removeFromCart(productId) {
-    this.cart = this.cart.filter(item => item.id !== productId);
+  removeFromCart(cartItemIdOrProductId) {
+    this.cart = this.cart.filter(item => item.cartItemId !== cartItemIdOrProductId && item.id !== cartItemIdOrProductId);
     this.saveCart();
   },
 

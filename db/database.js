@@ -61,6 +61,10 @@ const initDatabase = async () => {
         email TEXT UNIQUE NOT NULL,
         password TEXT NOT NULL,
         role TEXT DEFAULT 'customer',
+        seller_name TEXT,
+        seller_bio TEXT,
+        seller_rating REAL DEFAULT 5.0,
+        seller_reviews_count INTEGER DEFAULT 0,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
       )
     `);
@@ -83,6 +87,12 @@ const initDatabase = async () => {
         reviews_count INTEGER DEFAULT 0,
         featured INTEGER DEFAULT 0,
         specs TEXT,
+        seller_id INTEGER DEFAULT 1,
+        seller_name TEXT DEFAULT 'Apex Tech & Audio',
+        seller_rating REAL DEFAULT 4.9,
+        seller_reviews_count INTEGER DEFAULT 1480,
+        variants TEXT,
+        price_history TEXT,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
       )
     `);
@@ -119,6 +129,7 @@ const initDatabase = async () => {
         price REAL NOT NULL,
         quantity INTEGER NOT NULL,
         image TEXT,
+        selected_variant TEXT,
         subtotal REAL NOT NULL,
         FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
         FOREIGN KEY (product_id) REFERENCES products(id)
@@ -133,12 +144,40 @@ const initDatabase = async () => {
         user_name TEXT NOT NULL,
         rating INTEGER NOT NULL,
         comment TEXT NOT NULL,
+        pros TEXT,
+        cons TEXT,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
       )
     `);
 
-    console.log('✅ SQLite Schema initialized successfully.');
+    // Safe column migrations for existing databases
+    const safeAddColumn = async (table, columnDef) => {
+      try {
+        await run(`ALTER TABLE ${table} ADD COLUMN ${columnDef}`);
+      } catch (err) {
+        // Column already exists or table locked - safe to ignore
+      }
+    };
+
+    await safeAddColumn('users', 'seller_name TEXT');
+    await safeAddColumn('users', 'seller_bio TEXT');
+    await safeAddColumn('users', 'seller_rating REAL DEFAULT 5.0');
+    await safeAddColumn('users', 'seller_reviews_count INTEGER DEFAULT 0');
+
+    await safeAddColumn('products', 'seller_id INTEGER DEFAULT 1');
+    await safeAddColumn('products', "seller_name TEXT DEFAULT 'Apex Tech & Audio'");
+    await safeAddColumn('products', 'seller_rating REAL DEFAULT 4.9');
+    await safeAddColumn('products', 'seller_reviews_count INTEGER DEFAULT 1480');
+    await safeAddColumn('products', 'variants TEXT');
+    await safeAddColumn('products', 'price_history TEXT');
+
+    await safeAddColumn('order_items', 'selected_variant TEXT');
+
+    await safeAddColumn('reviews', 'pros TEXT');
+    await safeAddColumn('reviews', 'cons TEXT');
+
+    console.log('✅ SQLite Schema initialized with Marketplace & AI columns successfully.');
   } catch (error) {
     console.error('❌ Error initializing database schema:', error);
   }

@@ -43,6 +43,16 @@
 
       <!-- Action Controls -->
       <nav class="nav-actions">
+        <!-- AI Assistant Button -->
+        <button class="btn btn-outline btn-sm" id="nav-ai-btn" title="Ask Gemini AI Assistant" style="border-color: rgba(6, 182, 212, 0.4); color: var(--accent-cyan);">
+          <span>✨ Ask AI</span>
+        </button>
+
+        <!-- Seller Hub Button (visible to all or shows status) -->
+        <button class="btn btn-outline btn-sm" id="nav-seller-btn" title="Open Seller Portal" style="display: inline-flex;">
+          <span>🏪 Seller Hub</span>
+        </button>
+
         <!-- Track Order Button -->
         <button class="btn btn-outline btn-sm" id="nav-track-btn" title="Track your package">
           <span>📦 Track Order</span>
@@ -229,11 +239,26 @@
 
           <!-- Availability -->
           <div class="filter-group">
-            <div class="filter-group-title">Availability</div>
+            <div class="filter-group-title">Availability & Urgency</div>
             <label class="filter-checkbox-item">
               <input type="checkbox" id="in-stock-checkbox" />
               <span>In Stock Only</span>
             </label>
+            <label class="filter-checkbox-item" style="margin-top: 6px;">
+              <input type="checkbox" id="low-stock-checkbox" />
+              <span>⚡ Low Stock Alerts (&lt;5 left)</span>
+            </label>
+          </div>
+
+          <!-- Verified Sellers Filter -->
+          <div class="filter-group">
+            <div class="filter-group-title">Verified Merchants</div>
+            <select id="seller-filter-select" class="form-control" style="font-size: 0.85rem; padding: 8px 10px;">
+              <option value="">All Certified Sellers</option>
+              <option value="1">Apex Tech & Audio (4.9 ★)</option>
+              <option value="2">Nordic Living & Workspaces (4.8 ★)</option>
+              <option value="3">Aura Mobile & Wearables (4.9 ★)</option>
+            </select>
           </div>
 
           <!-- Discount Coupon Banner -->
@@ -568,22 +593,34 @@
   </div>
 
   <!-- ========================================================================
-       11. User Account Modal (Sign In / Register)
+       11. User Account Modal (Sign In / Register / Seller Signup)
        ======================================================================== -->
   <div class="modal-backdrop" id="auth-modal">
-    <div class="modal-card" style="max-width: 480px;">
+    <div class="modal-card" style="max-width: 520px;">
       <div class="modal-header">
-        <h3>Account</h3>
+        <h3 id="auth-modal-title">Welcome to TechStore</h3>
         <span class="modal-close-btn" title="Close">✕</span>
       </div>
       <div class="modal-body">
-        <!-- Quick Demo Fill -->
-        <div class="demo-account-box">
-          <div>
-            <div style="font-size: 0.82rem; font-weight: 700; color: var(--accent-cyan);">⚡ Quick Demo Login</div>
-            <div style="font-size: 0.78rem; color: var(--text-muted);">demo@techstore.com / password123</div>
+        <!-- Fast Demo Account Pickers -->
+        <div style="background: var(--bg-tertiary); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 12px; margin-bottom: 16px;">
+          <div style="font-size: 0.76rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; margin-bottom: 8px;">
+            ⚡ Quick Demo Logins
           </div>
-          <button class="btn btn-secondary btn-sm" id="demo-fill-btn">Auto-Fill</button>
+          <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+            <button class="btn btn-secondary btn-sm" id="demo-buyer-btn" style="font-size: 0.78rem;">
+              👤 Buyer (Alex)
+            </button>
+            <button class="btn btn-secondary btn-sm" id="demo-seller1-btn" style="font-size: 0.78rem;">
+              🏪 Seller 1 (Apex Audio)
+            </button>
+            <button class="btn btn-secondary btn-sm" id="demo-seller2-btn" style="font-size: 0.78rem;">
+              🏪 Seller 2 (Nordic Living)
+            </button>
+            <button class="btn btn-secondary btn-sm" id="demo-seller3-btn" style="font-size: 0.78rem;">
+              🏪 Seller 3 (Aura Wearables)
+            </button>
+          </div>
         </div>
 
         <!-- Auth Tabs -->
@@ -595,7 +632,7 @@
         <!-- Login Form -->
         <form id="login-form">
           <div class="form-group" style="margin-bottom: 14px;">
-            <label>Email</label>
+            <label>Email Address</label>
             <input type="email" id="login-email" class="form-control" placeholder="you@email.com" required />
           </div>
           <div class="form-group" style="margin-bottom: 20px;">
@@ -607,22 +644,42 @@
 
         <!-- Register Form -->
         <form id="register-form" style="display: none;">
-          <div class="form-group" style="margin-bottom: 14px;">
-            <label>Your Name</label>
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label>Your Full Name *</label>
             <input type="text" id="reg-name" class="form-control" placeholder="Alex Mercer" required />
           </div>
-          <div class="form-group" style="margin-bottom: 14px;">
-            <label>Email</label>
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label>Email Address *</label>
             <input type="email" id="reg-email" class="form-control" placeholder="alex@email.com" required />
           </div>
-          <div class="form-group" style="margin-bottom: 14px;">
-            <label>Password (at least 6 characters)</label>
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label>Password (at least 6 characters) *</label>
             <input type="password" id="reg-password" class="form-control" placeholder="••••••••" required minlength="6" />
           </div>
-          <div class="form-group" style="margin-bottom: 20px;">
-            <label>Confirm Password</label>
-            <input type="password" id="reg-confirm-password" class="form-control" placeholder="••••••••" required minlength="6" />
+
+          <!-- Seller Registration Checkbox -->
+          <div style="background: rgba(6, 182, 212, 0.08); border: 1px solid rgba(6, 182, 212, 0.25); border-radius: var(--radius-sm); padding: 12px; margin: 16px 0;">
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; margin-bottom: 0;">
+              <input type="checkbox" id="reg-is-seller" style="width: 18px; height: 18px; accent-color: var(--accent-cyan);" />
+              <div>
+                <strong style="color: var(--accent-cyan); font-size: 0.9rem;">I want to become a Seller on TechStore</strong>
+                <p style="font-size: 0.78rem; color: var(--text-secondary); margin: 0;">List your electronics, manage stock, and reach thousands of buyers.</p>
+              </div>
+            </label>
+
+            <!-- Seller extra fields revealed when checked -->
+            <div id="seller-extra-fields" style="display: none; margin-top: 14px; border-top: 1px dashed rgba(6, 182, 212, 0.25); padding-top: 12px;">
+              <div class="form-group" style="margin-bottom: 10px;">
+                <label style="font-size: 0.8rem;">Store / Brand Name *</label>
+                <input type="text" id="reg-seller-name" class="form-control" placeholder="Apex Audio & Gaming Co." />
+              </div>
+              <div class="form-group" style="margin-bottom: 0;">
+                <label style="font-size: 0.8rem;">Store Bio / Specialization</label>
+                <input type="text" id="reg-seller-bio" class="form-control" placeholder="Certified merchant for premium electronics." />
+              </div>
+            </div>
           </div>
+
           <button type="submit" class="btn btn-primary btn-block">Create Account</button>
         </form>
       </div>
@@ -642,6 +699,247 @@
         <div id="user-modal-profile-info"></div>
         <h4 style="margin-bottom: 14px; font-size: 1.05rem;">Order History</h4>
         <div id="user-modal-orders-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       13. Seller Hub & Merchant Portal Modal
+       ======================================================================== -->
+  <div class="modal-backdrop" id="seller-portal-modal">
+    <div class="modal-card modal-card-lg" style="max-width: 880px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 1.4rem;">🏪</span>
+          <div>
+            <h3 id="seller-portal-heading" style="margin: 0; line-height: 1.2;">Seller Hub</h3>
+            <span id="seller-portal-sub" style="font-size: 0.78rem; color: var(--text-muted);">Manage your listings & live inventory</span>
+          </div>
+        </div>
+        <span class="modal-close-btn" title="Close">✕</span>
+      </div>
+
+      <div class="modal-body">
+        <!-- Overview Stats -->
+        <div class="seller-stats-grid">
+          <div class="seller-stat-card">
+            <div class="seller-stat-val" id="seller-stat-products">0</div>
+            <div class="seller-stat-label">Active Listings</div>
+          </div>
+          <div class="seller-stat-card">
+            <div class="seller-stat-val" id="seller-stat-stock">0</div>
+            <div class="seller-stat-label">In Stock Units</div>
+          </div>
+          <div class="seller-stat-card">
+            <div class="seller-stat-val" id="seller-stat-rating">5.0 ★</div>
+            <div class="seller-stat-label">Seller Rating</div>
+          </div>
+          <div class="seller-stat-card">
+            <div class="seller-stat-val" style="color: #10b981;">Verified</div>
+            <div class="seller-stat-label">Merchant Status</div>
+          </div>
+        </div>
+
+        <!-- Seller Hub Tabs -->
+        <div class="auth-tabs-nav" style="margin-bottom: 20px;">
+          <div class="auth-tab-btn active" id="seller-tab-listings-btn">📋 My Inventory & Stock</div>
+          <div class="auth-tab-btn" id="seller-tab-create-btn">➕ List New Product for Sale</div>
+        </div>
+
+        <!-- Tab 1: Manage Listings & Live Stock -->
+        <div id="seller-pane-listings">
+          <div id="seller-listings-table-wrap" style="max-height: 420px; overflow-y: auto;">
+            <p style="color: var(--text-muted); text-align: center; padding: 30px;">Loading your listed products...</p>
+          </div>
+        </div>
+
+        <!-- Tab 2: List New Product -->
+        <div id="seller-pane-create" style="display: none;">
+          <form id="create-product-form">
+            <div class="form-grid">
+              <div class="form-group form-group-full">
+                <label>Product Title *</label>
+                <input type="text" id="new-prod-title" class="form-control" placeholder="e.g. Sony WH-1000XM5 Wireless Headphones" required />
+              </div>
+              <div class="form-group">
+                <label>Category *</label>
+                <select id="new-prod-category" class="form-control" required>
+                  <option value="Audio">Audio</option>
+                  <option value="Smartphones">Smartphones</option>
+                  <option value="Wearables">Wearables</option>
+                  <option value="Peripherals">Peripherals</option>
+                  <option value="Monitors">Monitors</option>
+                  <option value="TVs">Smart TVs</option>
+                  <option value="Tablets">Tablets</option>
+                  <option value="Gaming">Gaming</option>
+                  <option value="Accessories">Accessories</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Price (₹) *</label>
+                <input type="number" id="new-prod-price" class="form-control" placeholder="19999" required min="1" />
+              </div>
+              <div class="form-group">
+                <label>Original M.R.P. (₹)</label>
+                <input type="number" id="new-prod-original-price" class="form-control" placeholder="24990" min="1" />
+              </div>
+              <div class="form-group">
+                <label>Initial Stock Count * (Set &lt;5 for low stock alert)</label>
+                <input type="number" id="new-prod-stock" class="form-control" placeholder="10" required min="0" value="10" />
+              </div>
+            </div>
+
+            <!-- Image Selection Presets -->
+            <div class="form-group" style="margin-top: 14px;">
+              <label>Product Image (Select from Presets or Enter Custom URL)</label>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;" id="image-preset-picker">
+                <button type="button" class="btn btn-outline btn-sm preset-img-btn" data-url="images/products/sony_wh1000xm4.jpg">🎧 Headphones</button>
+                <button type="button" class="btn btn-outline btn-sm preset-img-btn" data-url="images/products/apple_watch_s9.jpg">⌚ Smartwatch</button>
+                <button type="button" class="btn btn-outline btn-sm preset-img-btn" data-url="images/products/keychron_k2.jpg">⌨️ Keyboard</button>
+                <button type="button" class="btn btn-outline btn-sm preset-img-btn" data-url="images/products/apple_iphone_15_pro.jpg">📱 Smartphone</button>
+                <button type="button" class="btn btn-outline btn-sm preset-img-btn" data-url="images/products/apple_studio_display.jpg">🖥️ Monitor</button>
+                <button type="button" class="btn btn-outline btn-sm preset-img-btn" data-url="images/products/sony_ps5_console.jpg">🎮 Console</button>
+                <button type="button" class="btn btn-outline btn-sm preset-img-btn" data-url="images/products/caselogic_backpack.jpg">🎒 Backpack</button>
+              </div>
+              <input type="text" id="new-prod-image" class="form-control" placeholder="https://images.unsplash.com/... or image path" />
+            </div>
+
+            <!-- Variants & Colors -->
+            <div class="form-grid" style="margin-top: 14px;">
+              <div class="form-group">
+                <label>Available Color Variants (comma-separated)</label>
+                <input type="text" id="new-prod-colors" class="form-control" placeholder="Midnight Black, Platinum Silver, Deep Blue" />
+              </div>
+              <div class="form-group">
+                <label>Size / Spec Options (comma-separated)</label>
+                <input type="text" id="new-prod-options" class="form-control" placeholder="128GB, 256GB, Standard" />
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 14px;">
+              <label>Short Summary *</label>
+              <input type="text" id="new-prod-short-desc" class="form-control" placeholder="Key highlight in one sentence." required />
+            </div>
+
+            <div class="form-group" style="margin-top: 14px;">
+              <label>Detailed Description</label>
+              <textarea id="new-prod-desc" class="form-control" rows="3" placeholder="Explain the key benefits, specs, and package contents."></textarea>
+            </div>
+
+            <div style="margin-top: 20px; display: flex; justify-content: flex-end; gap: 10px;">
+              <button type="button" class="btn btn-outline" onclick="document.getElementById('seller-tab-listings-btn').click();">Cancel</button>
+              <button type="submit" class="btn btn-primary">🚀 Publish to Marketplace</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       14. Gemini API Key Settings Modal
+       ======================================================================== -->
+  <div class="modal-backdrop" id="gemini-key-modal">
+    <div class="modal-card" style="max-width: 480px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span>✨</span>
+          <h3>Gemini AI Settings</h3>
+        </div>
+        <span class="modal-close-btn" title="Close">✕</span>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 14px;">
+          TechStore comes with a built-in intelligent AI engine that works <strong>100% offline</strong>.
+          If you prefer to connect directly to <strong>Google Gemini 1.5 / 2.0 Cloud</strong>, enter your free Google Gemini API key below:
+        </p>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label>Google Gemini API Key (Optional)</label>
+          <input type="password" id="gemini-key-input" class="form-control" placeholder="AIzaSy..." />
+        </div>
+
+        <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 18px;">
+          Key is stored locally in your browser. Leave blank at any time to use the local smart assistant.
+        </p>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button class="btn btn-outline btn-sm" id="clear-gemini-key-btn">Reset to Local AI</button>
+          <button class="btn btn-primary btn-sm" id="save-gemini-key-btn">Save Key</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       15. Floating AI Assistant Trigger & Slide-Out Drawer
+       ======================================================================== -->
+  <!-- Floating Button -->
+  <button class="floating-ai-trigger" id="floating-ai-trigger" title="Ask TechStore AI Shopping Assistant">
+    <span class="ai-sparkle-icon">✨</span>
+    <span>Ask Gemini AI</span>
+  </button>
+
+  <!-- Slide-out Drawer Backdrop & Drawer -->
+  <div class="ai-drawer-backdrop" id="ai-drawer-backdrop">
+    <div class="ai-drawer" id="ai-drawer">
+      <!-- Drawer Header -->
+      <div class="ai-drawer-header">
+        <div class="ai-drawer-title-wrap">
+          <div class="ai-logo-icon">✨</div>
+          <div>
+            <div style="font-weight: 700; font-size: 0.96rem; display: flex; align-items: center; gap: 6px;">
+              <span>Gemini Shopping AI</span>
+              <span class="ai-status-pill"><span class="ai-status-dot"></span> Active</span>
+            </div>
+            <div style="font-size: 0.76rem; color: var(--text-muted);">Grounded on TechStore Marketplace</div>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button class="btn-icon" id="open-gemini-settings-btn" title="Gemini Settings" style="font-size: 0.95rem;">⚙️</button>
+          <button class="btn-icon" id="ai-drawer-close-btn" title="Close AI Assistant">✕</button>
+        </div>
+      </div>
+
+      <!-- Active Product Context Banner (when viewing/inspecting an item) -->
+      <div class="ai-context-banner" id="ai-context-banner" style="display: none;">
+        <div class="ai-context-title">
+          <span>🛍️ Context:</span>
+          <span id="ai-context-product-name">Product Name</span>
+        </div>
+        <span class="ai-context-dismiss" id="ai-context-clear-btn" title="Clear product context">✕</span>
+      </div>
+
+      <!-- Messages Area -->
+      <div class="ai-messages-container" id="ai-messages-container">
+        <!-- Default Welcome Message -->
+        <div class="ai-msg bot">
+          <div class="ai-msg-avatar">✨</div>
+          <div class="ai-msg-content">
+            <h4 style="margin: 0 0 6px;">Hi there! I am your AI Shopping Assistant ⚡</h4>
+            <p style="margin: 0 0 10px;">I can help you make confident tech purchases:</p>
+            <ul style="margin: 0; padding-left: 18px;">
+              <li><strong>Summarize Customer Reviews:</strong> Compare what is good (pros) vs what could be better (cons).</li>
+              <li><strong>Price History & Timing:</strong> Check 90-day price trends and see if now is the best time to buy.</li>
+              <li><strong>Marketplace & Sellers:</strong> Learn how to become a seller or check merchant ratings.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action Chips -->
+      <div class="ai-chips-group" id="ai-quick-chips">
+        <button class="ai-chip-btn" data-action="review-summary">📝 Summarize Reviews</button>
+        <button class="ai-chip-btn" data-action="best-time">📈 Best Time to Buy?</button>
+        <button class="ai-chip-btn" data-action="become-seller">🏪 Become a Seller</button>
+        <button class="ai-chip-btn" data-action="track-help">📦 Delivery & Tracking</button>
+      </div>
+
+      <!-- Chat Input Bar -->
+      <div class="ai-input-bar">
+        <input type="text" id="ai-user-input" placeholder="Ask about specs, pros & cons, deals..." autocomplete="off" />
+        <button class="ai-send-btn" id="ai-send-btn" title="Send message">➤</button>
       </div>
     </div>
   </div>

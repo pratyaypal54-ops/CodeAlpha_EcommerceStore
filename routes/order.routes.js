@@ -3,8 +3,8 @@ const router = express.Router();
 const { run, get, all } = require('../db/database');
 const { authenticate, optionalAuth } = require('../middleware/auth');
 
-// 1. POST /api/orders - Place a new order
-router.post('/', optionalAuth, async (req, res) => {
+// 1. POST /api/orders - Place a new order (Requires logged-in user account)
+router.post('/', authenticate, async (req, res) => {
   try {
     const {
       customerName,
@@ -16,18 +16,25 @@ router.post('/', optionalAuth, async (req, res) => {
       discountCode
     } = req.body;
 
-    // Validation
-    if (!customerName || !customerEmail || !shippingAddress || !items || !Array.isArray(items) || items.length === 0) {
+    // Strict account & delivery details validation
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({
+        success: false,
+        message: 'You must create an account or sign in before placing an order.'
+      });
+    }
+
+    if (!customerName || !customerEmail || !customerPhone || !shippingAddress || !items || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({
         success: false,
-        message: 'Missing required order details or cart items.'
+        message: 'Missing essential delivery details (Name, Email, Phone) or empty cart.'
       });
     }
 
     if (!shippingAddress.address || !shippingAddress.city || !shippingAddress.zip) {
       return res.status(400).json({
         success: false,
-        message: 'Please provide a complete shipping address (street, city, postal code).'
+        message: 'Please provide full essential delivery details: street address, city, and postal PIN code.'
       });
     }
 
@@ -49,7 +56,9 @@ router.post('/', optionalAuth, async (req, res) => {
       if (product.stock < qty) {
         return res.status(400).json({
           success: false,
-          message: `Insufficient stock for "${product.title}". Only ${product.stock} available.`
+          message: product.stock === 0 
+            ? `"${product.title}" is currently out of stock.`
+            : `Insufficient stock for "${product.title}". Only ${product.stock} available.`
         });
       }
 
@@ -62,6 +71,7 @@ router.post('/', optionalAuth, async (req, res) => {
         price: product.price,
         quantity: qty,
         image: product.image,
+        selected_variant: item.selectedVariant || null,
         subtotal: itemTotal
       });
     }
@@ -93,8 +103,8 @@ router.post('/', optionalAuth, async (req, res) => {
     const randomSuffix = Math.floor(100000 + Math.random() * 900000);
     const orderNumber = `ORD-2025-${randomSuffix}`;
 
-    // Get user id if user is logged in
-    const userId = req.user ? req.user.id : null;
+    // Get verified user ID
+    const userId = req.user.id;
 
     // Insert Order Record
     const orderResult = await run(
@@ -107,7 +117,7 @@ router.post('/', optionalAuth, async (req, res) => {
         userId,
         customerName.trim(),
         customerEmail.toLowerCase().trim(),
-        customerPhone || '',
+        customerPhone.trim(),
         JSON.stringify(shippingAddress),
         paymentMethod,
         subtotal,
@@ -124,9 +134,9 @@ router.post('/', optionalAuth, async (req, res) => {
     // Insert Order Items and Update Product Stocks
     for (const item of validatedItems) {
       await run(
-        `INSERT INTO order_items (order_id, product_id, title, price, quantity, image, subtotal)
-         VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        [orderId, item.product_id, item.title, item.price, item.quantity, item.image, item.subtotal]
+        `INSERT INTO order_items (order_id, product_id, title, price, quantity, image, selected_variant, subtotal)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        [orderId, item.product_id, item.title, item.price, item.quantity, item.image, item.selected_variant, item.subtotal]
       );
 
       // Decrement stock
