@@ -1817,6 +1817,402 @@ const seedProducts = [
         cons: 'Curved edge screen can occasionally register palm touches without a case.'
       }
     ]
+  },
+  // ---------------- AFFORDABLE ACCESSORIES & AUDIO GEAR ----------------
+  {
+    title: 'boAt BassHeads 100 Wired In-Ear Earphones with Mic',
+    slug: 'boat-bassheads-100-wired-earphones',
+    category: 'Audio',
+    price: 399,
+    original_price: 999,
+    short_description: 'Hawk-inspired aerodynamic earbuds with 10mm dynamic drivers, super extra bass, and HD mic.',
+    description: 'boAt BassHeads 100 in-ear wired earphones feature 10mm dynamic drivers tuned for super extra punchy bass. Comes with an integrated inline HD microphone for crystal-clear calls, a 1.2-meter tangle-resistant cable, and gold-plated 3.5mm angled connector.',
+    image: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=800&q=80',
+    gallery: JSON.stringify([
+      'https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80'
+    ]),
+    stock: 45,
+    rating: 4.6,
+    reviews_count: 340,
+    featured: 1,
+    seller_id: 1,
+    seller_name: 'Apex Tech & Audio',
+    seller_rating: 4.9,
+    seller_reviews_count: 1480,
+    variants: JSON.stringify({
+      colors: [
+        { name: 'Furious Red', hex: '#ef4444' },
+        { name: 'Black Panther', hex: '#111827' },
+        { name: 'Taffy Pink', hex: '#ec4899' }
+      ],
+      options: ['Standard 3.5mm Jack']
+    }),
+    price_history: JSON.stringify({
+      current: 399,
+      lowest: 349,
+      highest: 999,
+      deal_score: 95,
+      verdict: 'Phenomenal Budget Pick! 60% below standard price.',
+      history: [
+        { date: '90d ago', price: 699 },
+        { date: '60d ago', price: 499 },
+        { date: '30d ago', price: 449 },
+        { date: 'Current', price: 399 }
+      ]
+    }),
+    specs: JSON.stringify({
+      'Brand': 'boAt',
+      'Driver Size': '10mm Dynamic Drivers',
+      'Connector': '3.5mm Gold-Plated L-Shaped Jack',
+      'Microphone': 'In-line HD Microphone',
+      'Cable Length': '1.2m Tangle-Resistant',
+      'Warranty': '1 Year boAt Domestic Warranty'
+    }),
+    reviews: [
+      {
+        user_name: 'Kunal Verma',
+        rating: 5,
+        comment: 'For ₹399 this is genuinely unbeatable! The bass punch is surprisingly deep and call audio is crisp.',
+        pros: 'Thumping bass, comfortable ear tips, angled durable 3.5mm jack.',
+        cons: 'Wire can tangle if tossed in a pocket without a tie.'
+      }
+    ]
+  },
+  {
+    title: 'Zebronics Zeb-Bro In-Ear Wired Earphones with Mic',
+    slug: 'zebronics-zeb-bro-wired-earphones',
+    category: 'Audio',
+    price: 199,
+    original_price: 399,
+    short_description: 'Ultra-budget lightweight earphones with 10mm drivers, built-in mic, and snug-fit silicone tips.',
+    description: 'Zebronics Zeb-Bro delivers clear acoustics and balanced audio for online classes, video calls, podcasts, and daily listening. Weighs only 14 grams with an inline mic and one-button answer/reject switch.',
+    image: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=800&q=80',
+    gallery: JSON.stringify([
+      'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=800&q=80'
+    ]),
+    stock: 60,
+    rating: 4.4,
+    reviews_count: 215,
+    featured: 0,
+    seller_id: 1,
+    seller_name: 'Apex Tech & Audio',
+    seller_rating: 4.9,
+    seller_reviews_count: 1480,
+    variants: JSON.stringify({
+      colors: [
+        { name: 'Classic Black', hex: '#18181b' },
+        { name: 'Cobalt Blue', hex: '#2563eb' }
+      ],
+      options: ['Standard 3.5mm']
+    }),
+    price_history: JSON.stringify({
+      current: 199,
+      lowest: 179,
+      highest: 399,
+      deal_score: 92,
+      verdict: 'Super Cheap Daily Driver! Perfect backup earphone under ₹200.',
+      history: [
+        { date: '90d ago', price: 299 },
+        { date: 'Current', price: 199 }
+      ]
+    }),
+    specs: JSON.stringify({
+      'Brand': 'Zebronics',
+      'Jack': '3.5mm Audio Connector',
+      'Impedance': '16 Ohms',
+      'Frequency Response': '20Hz - 20kHz',
+      'Weight': '14g Ultra-Light'
+    }),
+    reviews: [
+      {
+        user_name: 'Rohan Deshmukh',
+        rating: 4,
+        comment: 'Great cheap pair of wired earphones to keep in laptop backpack. Mic works fine on Zoom calls.',
+        pros: 'Crazy cheap at ₹199, very lightweight, decent vocals.',
+        cons: 'Plastic construction is basic.'
+      }
+    ]
+  },
+  {
+    title: 'Portronics Konnect CL 20W Type-C to Lightning Fast Charging Cable (1.2m)',
+    slug: 'portronics-konnect-cl-typec-lightning-cable',
+    category: 'Accessories',
+    price: 249,
+    original_price: 699,
+    short_description: '20W PD fast-charging Type-C to Lightning cable with high-tensile nylon braiding.',
+    description: 'Portronics Konnect CL supports 20W Power Delivery to charge your iPhone up to 50% in just 30 minutes. Engineered with high-strength braided nylon tested to withstand 10,000+ bends and corrosion-resistant gold-plated contact pins for 480Mbps data synchronization.',
+    image: 'https://images.unsplash.com/photo-1585338107529-13afc5f02586?auto=format&fit=crop&w=800&q=80',
+    gallery: JSON.stringify([
+      'https://images.unsplash.com/photo-1585338107529-13afc5f02586?auto=format&fit=crop&w=800&q=80'
+    ]),
+    stock: 50,
+    rating: 4.7,
+    reviews_count: 180,
+    featured: 1,
+    seller_id: 3,
+    seller_name: 'Aura Mobile & Wearables',
+    seller_rating: 4.9,
+    seller_reviews_count: 2150,
+    variants: JSON.stringify({
+      colors: [
+        { name: 'Space Grey', hex: '#4b5563' },
+        { name: 'Midnight Black', hex: '#111827' }
+      ],
+      options: ['1.2m Length']
+    }),
+    price_history: JSON.stringify({
+      current: 249,
+      lowest: 229,
+      highest: 699,
+      deal_score: 96,
+      verdict: 'Heavy Discount! 64% off M.R.P. for premium braided charging cable.',
+      history: [
+        { date: '90d ago', price: 499 },
+        { date: '60d ago', price: 349 },
+        { date: 'Current', price: 249 }
+      ]
+    }),
+    specs: JSON.stringify({
+      'Brand': 'Portronics',
+      'Connector Type': 'USB-C to 8-Pin Lightning',
+      'Max Output': '20W Power Delivery (PD)',
+      'Data Speed': '480 Mbps',
+      'Cable Material': 'Reinforced Braided Nylon',
+      'Bend Lifespan': '10,000+ Bends'
+    }),
+    reviews: [
+      {
+        user_name: 'Sneha Patel',
+        rating: 5,
+        comment: 'Charges my iPhone 14 rapidly with 20W brick. The braided wire feels substantially more durable than the original white Apple cable.',
+        pros: 'Fast charging works reliably, strong strain relief, tangle-free.',
+        cons: 'None so far.'
+      }
+    ]
+  },
+  {
+    title: 'Ambrane 65W Type-C to Type-C Ultra-Fast Braided Cable (1.5m)',
+    slug: 'ambrane-65w-typec-to-typec-cable',
+    category: 'Accessories',
+    price: 299,
+    original_price: 799,
+    short_description: '65W USB-PD fast charging cable with smart E-Marker chip for smartphones, tablets & laptops.',
+    description: 'Ambrane 65W Power Delivery cable features an intelligent E-Marker chipset that automatically identifies connected devices to regulate current and prevent overcharging. Compatible with MacBooks, iPad Air/Pro, Samsung Galaxy, and OnePlus smartphones.',
+    image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80',
+    gallery: JSON.stringify([
+      'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80'
+    ]),
+    stock: 40,
+    rating: 4.8,
+    reviews_count: 145,
+    featured: 1,
+    seller_id: 3,
+    seller_name: 'Aura Mobile & Wearables',
+    seller_rating: 4.9,
+    seller_reviews_count: 2150,
+    variants: JSON.stringify({
+      colors: [
+        { name: 'Stealth Black', hex: '#18181b' },
+        { name: 'Navy Blue', hex: '#1e3a8a' }
+      ],
+      options: ['1.5m Length']
+    }),
+    price_history: JSON.stringify({
+      current: 299,
+      lowest: 279,
+      highest: 799,
+      deal_score: 95,
+      verdict: 'High-Value Pick! Charges both phones and laptops for under ₹300.',
+      history: [
+        { date: '90d ago', price: 599 },
+        { date: '60d ago', price: 399 },
+        { date: 'Current', price: 299 }
+      ]
+    }),
+    specs: JSON.stringify({
+      'Brand': 'Ambrane',
+      'Max Power': '65W (20V/3.25A) Fast Charge',
+      'Chipset': 'E-Marker Intelligent IC',
+      'Interface': 'Type-C to Type-C',
+      'Length': '1.5 Meters',
+      'Core': 'Oxygen-Free Pure Copper'
+    }),
+    reviews: [
+      {
+        user_name: 'Deepak Rao',
+        rating: 5,
+        comment: 'Pumps full 65W into my Dell XPS and Pixel 8 without heating up. Excellent quality.',
+        pros: '65W laptop charging, generous 1.5m length, metal ends.',
+        cons: 'Does not support 4K display output.'
+      }
+    ]
+  },
+  {
+    title: 'Mi 20W Type-C Fast Charger Power Adapter (USB-PD 3.0)',
+    slug: 'mi-20w-typec-fast-charger-adapter',
+    category: 'Accessories',
+    price: 449,
+    original_price: 899,
+    short_description: 'Compact 20W USB-C wall charger with 8-layer circuit protection and universal PD protocol.',
+    description: 'Xiaomi 20W Type-C wall adapter provides high-speed Power Delivery charging in an ultra-compact form factor. Built with flame-retardant PC material and 8-layer multi-point safety protection against power surges, short circuits, and overheating.',
+    image: 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=800&q=80',
+    gallery: JSON.stringify([
+      'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=800&q=80'
+    ]),
+    stock: 35,
+    rating: 4.7,
+    reviews_count: 205,
+    featured: 1,
+    seller_id: 3,
+    seller_name: 'Aura Mobile & Wearables',
+    seller_rating: 4.9,
+    seller_reviews_count: 2150,
+    variants: JSON.stringify({
+      colors: [
+        { name: 'Pure White', hex: '#ffffff' },
+        { name: 'Matte Black', hex: '#1c1c1e' }
+      ],
+      options: ['20W Single Port']
+    }),
+    price_history: JSON.stringify({
+      current: 449,
+      lowest: 429,
+      highest: 899,
+      deal_score: 93,
+      verdict: 'Essential Accessory! 50% below standard price.',
+      history: [
+        { date: '90d ago', price: 699 },
+        { date: '60d ago', price: 549 },
+        { date: 'Current', price: 449 }
+      ]
+    }),
+    specs: JSON.stringify({
+      'Brand': 'Xiaomi (Mi)',
+      'Input': '100-240V ~ 50/60Hz 0.5A',
+      'Output': '5V/3A, 9V/2.22A, 12V/1.67A (20W Max)',
+      'Port': 'Type-C USB-PD',
+      'Dimensions': '30 x 30 x 38 mm',
+      'Safety': 'BIS Certified 8-Layer Protection'
+    }),
+    reviews: [
+      {
+        user_name: 'Pooja Iyer',
+        rating: 5,
+        comment: 'Tiny adapter that easily fits into small pockets. Rapid charges my iPhone and Galaxy S23.',
+        pros: 'Extremely compact, stays cool while charging, genuine 20W PD.',
+        cons: 'Cable is sold separately.'
+      }
+    ]
+  },
+  {
+    title: 'UGREEN USB-C to 3.5mm Headphone Jack DAC Adapter (Hi-Res Audio)',
+    slug: 'ugreen-usbc-to-35mm-dac-adapter',
+    category: 'Accessories',
+    price: 349,
+    original_price: 699,
+    short_description: 'Lossless 24-bit/96kHz DAC audio adapter for USB-C phones, tablets & laptops.',
+    description: 'UGREEN USB-C to 3.5mm headphone adapter incorporates a high-grade digital-to-analog converter (DAC) that produces 24-bit/96kHz lossless studio acoustic fidelity. Aluminum alloy casing with kevlar braided strain relief prevents signal interference and supports microphone calls and volume control.',
+    image: 'https://images.unsplash.com/photo-1616440347437-b1c73416efc2?auto=format&fit=crop&w=800&q=80',
+    gallery: JSON.stringify([
+      'https://images.unsplash.com/photo-1616440347437-b1c73416efc2?auto=format&fit=crop&w=800&q=80'
+    ]),
+    stock: 30,
+    rating: 4.8,
+    reviews_count: 120,
+    featured: 0,
+    seller_id: 1,
+    seller_name: 'Apex Tech & Audio',
+    seller_rating: 4.9,
+    seller_reviews_count: 1480,
+    variants: JSON.stringify({
+      colors: [
+        { name: 'Space Gray Aluminum', hex: '#4b5563' }
+      ],
+      options: ['Hi-Res DAC Edition']
+    }),
+    price_history: JSON.stringify({
+      current: 349,
+      lowest: 329,
+      highest: 699,
+      deal_score: 94,
+      verdict: 'Audiophile Must-Have! Zero background hiss or static.',
+      history: [
+        { date: '90d ago', price: 499 },
+        { date: 'Current', price: 349 }
+      ]
+    }),
+    specs: JSON.stringify({
+      'Brand': 'UGREEN',
+      'DAC Chip': '24-bit / 96kHz Lossless Sampling Rate',
+      'Housing': 'Anodized Aluminum Alloy',
+      'Cord': 'Kevlar Braided Wire',
+      'Mic Support': 'Yes (TRRS 4-Pole Support)'
+    }),
+    reviews: [
+      {
+        user_name: 'Arjun Mehta',
+        rating: 5,
+        comment: 'Works flawlessly on iPad Air and Galaxy phone. Completely silent background with zero electronic hiss.',
+        pros: 'Clean audio output, mic and buttons work, sturdy metal build.',
+        cons: 'Slightly warm after 3 hours of continuous playback.'
+      }
+    ]
+  },
+  {
+    title: 'Satechi Aluminum USB 3.0 to Type-C OTG Mini Adapter',
+    slug: 'satechi-aluminum-usb-to-typec-otg-adapter',
+    category: 'Accessories',
+    price: 149,
+    original_price: 399,
+    short_description: '5Gbps SuperSpeed plug-and-play USB to Type-C OTG converter in brushed aluminum.',
+    description: 'Convert any legacy USB-A port to USB Type-C or connect flash drives, keyboards, and mice directly to smartphones and laptops. Supports ultra-fast 5Gbps SuperSpeed data transfer and simultaneous charging.',
+    image: 'https://images.unsplash.com/photo-1618761714954-0b8cd0026356?auto=format&fit=crop&w=800&q=80',
+    gallery: JSON.stringify([
+      'https://images.unsplash.com/photo-1618761714954-0b8cd0026356?auto=format&fit=crop&w=800&q=80'
+    ]),
+    stock: 40,
+    rating: 4.6,
+    reviews_count: 95,
+    featured: 0,
+    seller_id: 2,
+    seller_name: 'Nordic Living & Workspaces',
+    seller_rating: 4.8,
+    seller_reviews_count: 940,
+    variants: JSON.stringify({
+      colors: [
+        { name: 'Space Gray', hex: '#4b5563' },
+        { name: 'Matte Silver', hex: '#d1d5db' }
+      ],
+      options: ['Single Adapter']
+    }),
+    price_history: JSON.stringify({
+      current: 149,
+      lowest: 129,
+      highest: 399,
+      deal_score: 95,
+      verdict: 'Super Cheap Must-Have! Essential pocket adapter for just ₹149.',
+      history: [
+        { date: '90d ago', price: 299 },
+        { date: 'Current', price: 149 }
+      ]
+    }),
+    specs: JSON.stringify({
+      'Brand': 'Satechi',
+      'Transfer Rate': 'USB 3.0 SuperSpeed up to 5 Gbps',
+      'Enclosure': 'Sandblasted Aluminum Alloy',
+      'Plug and Play': 'Driver-Free Installation',
+      'Form Factor': 'Ultra-Compact Coin Size'
+    }),
+    reviews: [
+      {
+        user_name: 'Vivek Nair',
+        rating: 5,
+        comment: 'Tiny, well-made adapter that fits side-by-side with other ports on my laptop without blocking them.',
+        pros: 'Brushed metal finish, solid grip, fast file transfers.',
+        cons: 'Can be easy to misplace due to tiny size.'
+      }
+    ]
   }
 ];
 

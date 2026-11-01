@@ -29,7 +29,15 @@ const State = {
       if (savedToken) this.token = savedToken;
 
       const savedCart = localStorage.getItem('techstore_cart');
-      if (savedCart) this.cart = JSON.parse(savedCart);
+      if (savedCart) {
+        const parsedCart = JSON.parse(savedCart);
+        if (Array.isArray(parsedCart)) {
+          this.cart = parsedCart.map(item => ({
+            ...item,
+            cartItemId: item.cartItemId || `${item.id}__${item.selectedVariant || 'Default'}`
+          }));
+        }
+      }
 
       const savedWishlist = localStorage.getItem('techstore_wishlist');
       if (savedWishlist) this.wishlist = JSON.parse(savedWishlist);
@@ -83,7 +91,10 @@ const State = {
     const variantKey = selectedVariant || 'Default';
     const cartItemId = `${product.id}__${variantKey}`;
 
-    const existingIndex = this.cart.findIndex(item => item.cartItemId === cartItemId || (!item.cartItemId && item.id === product.id && (item.selectedVariant || 'Default') === variantKey));
+    const existingIndex = this.cart.findIndex(item => 
+      item.cartItemId === cartItemId || 
+      (String(item.id) === String(product.id) && (item.selectedVariant || 'Default') === variantKey)
+    );
 
     if (existingIndex > -1) {
       const existing = this.cart[existingIndex];
@@ -92,6 +103,7 @@ const State = {
         throw new Error(product.stock === 0 ? `Sorry, "${product.title}" is out of stock.` : `Only ${product.stock} items left in stock.`);
       }
       existing.quantity = newQty;
+      existing.cartItemId = cartItemId; // ensure cartItemId is set
     } else {
       if (product.stock === 0) {
         throw new Error(`"${product.title}" is currently out of stock.`);
@@ -100,7 +112,7 @@ const State = {
         cartItemId,
         id: product.id,
         title: product.title,
-        price: product.price,
+        price: Number(product.price),
         image: product.image,
         category: product.category,
         stock: product.stock !== undefined ? product.stock : 20,
@@ -115,7 +127,11 @@ const State = {
   },
 
   updateCartQuantity(cartItemIdOrProductId, quantity) {
-    const item = this.cart.find(i => i.cartItemId === cartItemIdOrProductId || i.id === cartItemIdOrProductId);
+    const target = String(cartItemIdOrProductId);
+    const item = this.cart.find(i => 
+      (i.cartItemId && String(i.cartItemId) === target) || 
+      String(i.id) === target
+    );
     if (!item) return;
 
     if (quantity <= 0) {
@@ -124,13 +140,22 @@ const State = {
       if (item.stock !== undefined && quantity > item.stock) {
         throw new Error(`Maximum available stock is ${item.stock}`);
       }
-      item.quantity = quantity;
+      item.quantity = Number(quantity);
       this.saveCart();
     }
   },
 
   removeFromCart(cartItemIdOrProductId) {
-    this.cart = this.cart.filter(item => item.cartItemId !== cartItemIdOrProductId && item.id !== cartItemIdOrProductId);
+    const target = String(cartItemIdOrProductId);
+    this.cart = this.cart.filter(item => {
+      // 1. Exact match on cartItemId (e.g. "5__Default")
+      if (item.cartItemId && String(item.cartItemId) === target) return false;
+      // 2. Exact match on product id if target doesn't contain variant separator
+      if (String(item.id) === target) return false;
+      // 3. Fallback match if item has no cartItemId
+      if (!item.cartItemId && String(item.id) === target.split('__')[0]) return false;
+      return true;
+    });
     this.saveCart();
   },
 
@@ -147,18 +172,18 @@ const State = {
   },
 
   getCartTotals() {
-    const subtotal = this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const count = this.cart.reduce((sum, item) => sum + item.quantity, 0);
+    const subtotal = this.cart.reduce((sum, item) => sum + (Number(item.price) * Number(item.quantity)), 0);
+    const count = this.cart.reduce((sum, item) => sum + Number(item.quantity), 0);
 
     let discount = 0;
     if (this.activeCoupon) {
-      discount = subtotal * this.activeCoupon.discountRate;
+      discount = subtotal * (this.activeCoupon.discountRate || 0);
     }
 
     // Free shipping on orders of ₹499 or more
     let shippingFee = 0;
     if (subtotal > 0) {
-      if (subtotal >= 499 || (this.activeCoupon && this.activeCoupon.code === 'FREESHIP')) {
+      if (subtotal >= 499 || (this.activeCoupon && (this.activeCoupon.code === 'FREESHIP' || this.activeCoupon.freeShipping))) {
         shippingFee = 0;
       } else {
         shippingFee = 49.00;

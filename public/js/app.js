@@ -25,7 +25,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     4: 'images/products/keychron_k2.jpg',
     5: 'images/products/sony_ps5_console.jpg',
     6: 'images/products/apple_iphone_15_pro.jpg',
-    7: 'https://images.unsplash.com/photo-1622445262464-84b1456045b6?auto=format&fit=crop&w=800&q=80'
+    7: 'https://images.unsplash.com/photo-1622445262464-84b1456045b6?auto=format&fit=crop&w=800&q=80',
+    31: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=800&q=80',
+    32: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=800&q=80',
+    33: 'https://images.unsplash.com/photo-1585338107529-13afc5f02586?auto=format&fit=crop&w=800&q=80',
+    34: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80',
+    35: 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=800&q=80',
+    36: 'https://images.unsplash.com/photo-1616440347437-b1c73416efc2?auto=format&fit=crop&w=800&q=80',
+    37: 'https://images.unsplash.com/photo-1618761714954-0b8cd0026356?auto=format&fit=crop&w=800&q=80'
   };
 
   window.CATEGORY_FALLBACK_IMAGES = {
@@ -1219,7 +1226,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   window.addModalProductToCart = (id) => {
     const qty = parseInt(document.getElementById('modal-qty-input').value, 10) || 1;
-    const prod = currentProducts.find(p => p.id === id);
+    const prod = currentProducts.find(p => p.id === id || p.id === Number(id));
     if (prod) {
       const variantParts = [];
       if (activeModalSelectedColor) variantParts.push(`Color: ${activeModalSelectedColor}`);
@@ -1268,18 +1275,26 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 7. Cart Drawer Operations
   // --------------------------------------------------------------------------
   const cartDrawerBackdrop = document.getElementById('cart-drawer-backdrop');
-  const cartItemsList = document.getElementById('cart-items-list');
+  const cartItemsContainer = document.getElementById('cart-items-container') || document.getElementById('cart-items-list');
   const cartToggleBtn = document.getElementById('cart-toggle-btn');
   const cartCloseBtn = document.getElementById('cart-close-btn');
+  const cartClearAllBtn = document.getElementById('cart-clear-all-btn');
   const cartCountBadge = document.getElementById('cart-count-badge');
+  const cartDrawerCount = document.getElementById('cart-drawer-count');
   const checkoutTriggerBtn = document.getElementById('checkout-trigger-btn');
+  const shippingProgressText = document.getElementById('shipping-progress-text');
+  const shippingProgressFill = document.getElementById('shipping-progress-fill');
 
   const openCartDrawer = () => {
+    renderCartUI();
     if (cartDrawerBackdrop) cartDrawerBackdrop.classList.add('open');
   };
   const closeCartDrawer = () => {
     if (cartDrawerBackdrop) cartDrawerBackdrop.classList.remove('open');
   };
+
+  window.openCartDrawer = openCartDrawer;
+  window.closeCartDrawer = closeCartDrawer;
 
   if (cartToggleBtn) cartToggleBtn.addEventListener('click', openCartDrawer);
   if (cartCloseBtn) cartCloseBtn.addEventListener('click', closeCartDrawer);
@@ -1289,8 +1304,36 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
+  // Clear all cart items
+  if (cartClearAllBtn) {
+    cartClearAllBtn.addEventListener('click', () => {
+      if (!State.cart || State.cart.length === 0) return;
+      if (confirm('Are you sure you want to remove all items from your cart?')) {
+        State.clearCart();
+        showToast('Cart has been cleared.', 'info');
+      }
+    });
+  }
+
+  // Close cart on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && cartDrawerBackdrop && cartDrawerBackdrop.classList.contains('open')) {
+      closeCartDrawer();
+    }
+  });
+
+  // Handle #cart URL hash
+  if (window.location.hash === '#cart') {
+    openCartDrawer();
+  }
+  window.addEventListener('hashchange', () => {
+    if (window.location.hash === '#cart') {
+      openCartDrawer();
+    }
+  });
+
   window.handleAddToCart = (id) => {
-    const prod = currentProducts.find(p => p.id === id);
+    const prod = currentProducts.find(p => p.id === id || p.id === Number(id));
     if (!prod) return;
     try {
       State.addToCart(prod, 1);
@@ -1310,10 +1353,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   };
 
+  window.handleRemoveFromCart = (cartItemIdOrProductId) => {
+    State.removeFromCart(cartItemIdOrProductId);
+    showToast('Item removed from cart.', 'info');
+  };
+
   const renderCartUI = () => {
     const totals = State.getCartTotals();
 
-    // Badge
+    // Nav Badge & Drawer Header Badge
     if (cartCountBadge) {
       if (totals.itemCount > 0) {
         cartCountBadge.textContent = totals.itemCount;
@@ -1322,20 +1370,53 @@ document.addEventListener('DOMContentLoaded', async () => {
         cartCountBadge.style.display = 'none';
       }
     }
+    if (cartDrawerCount) {
+      if (totals.itemCount > 0) {
+        cartDrawerCount.textContent = `${totals.itemCount} item${totals.itemCount > 1 ? 's' : ''}`;
+        cartDrawerCount.style.display = 'inline-block';
+      } else {
+        cartDrawerCount.style.display = 'none';
+      }
+    }
 
-    // List
-    if (cartItemsList) {
+    // Free Delivery Progress Tracker (Threshold: ₹499)
+    const FREE_SHIPPING_THRESHOLD = 499;
+    if (shippingProgressText && shippingProgressFill) {
+      const hasFreeShippingCoupon = Boolean(State.activeCoupon && (State.activeCoupon.freeShipping || State.activeCoupon.code === 'FREESHIP'));
+
+      if (totals.subtotal <= 0) {
+        shippingProgressText.innerHTML = `Add <strong>₹499.00</strong> more to get <strong>Free Delivery</strong>!`;
+        shippingProgressFill.style.width = '0%';
+        shippingProgressFill.style.background = 'var(--accent-gradient)';
+      } else if (totals.subtotal >= FREE_SHIPPING_THRESHOLD || hasFreeShippingCoupon) {
+        shippingProgressText.innerHTML = `🎉 <strong>Congratulations!</strong> You have unlocked <strong>FREE Delivery</strong>!`;
+        shippingProgressFill.style.width = '100%';
+        shippingProgressFill.style.background = 'linear-gradient(135deg, #10b981 0%, #06b6d4 100%)';
+      } else {
+        const remaining = Number((FREE_SHIPPING_THRESHOLD - totals.subtotal).toFixed(2));
+        const percent = Math.min(100, Math.max(0, Math.round((totals.subtotal / FREE_SHIPPING_THRESHOLD) * 100)));
+        shippingProgressText.innerHTML = `Add <strong>${formatCurrency(remaining)}</strong> more to get <strong>Free Delivery</strong>!`;
+        shippingProgressFill.style.width = `${percent}%`;
+        shippingProgressFill.style.background = 'var(--accent-gradient)';
+      }
+    }
+
+    // Cart Items Rendering
+    if (cartItemsContainer) {
       if (State.cart.length === 0) {
-        cartItemsList.innerHTML = `
+        cartItemsContainer.innerHTML = `
           <div class="cart-empty-state">
             <div class="cart-empty-icon">🛒</div>
             <h4>Your cart is empty</h4>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Browse our marketplace catalog and add gadgets!</p>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Browse our marketplace catalog and add gadgets & accessories!</p>
           </div>
         `;
       } else {
-        cartItemsList.innerHTML = State.cart.map(item => `
-          <div class="cart-item">
+        cartItemsContainer.innerHTML = State.cart.map(item => {
+          const rawItemId = item.cartItemId || String(item.id);
+          const safeItemId = String(rawItemId).replace(/"/g, '&quot;');
+          return `
+          <div class="cart-item" data-cart-item-id="${safeItemId}">
             <div class="cart-item-image">
               <img src="${window.formatProductImageUrl(item.image)}" alt="${item.title}" onerror="this.src=window.getProductFallbackImage(${item.id}, '${item.category}')" />
             </div>
@@ -1343,20 +1424,23 @@ document.addEventListener('DOMContentLoaded', async () => {
               <div>
                 <div class="cart-item-title">${item.title}</div>
                 ${item.selectedVariant ? `<div style="font-size: 0.76rem; color: var(--accent-cyan); margin-top: 2px;">${item.selectedVariant}</div>` : ''}
-                <div style="font-size: 0.74rem; color: var(--text-muted);">Merchant: ${item.seller_name || 'Apex Tech & Audio'}</div>
+                <div style="font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">Merchant: ${item.seller_name || 'Apex Tech & Audio'}</div>
               </div>
               <div class="cart-item-price">${formatCurrency(item.price)}</div>
               <div class="cart-item-actions">
                 <div class="quantity-control" style="transform: scale(0.85); transform-origin: left;">
-                  <button class="qty-btn" onclick="State.updateCartQuantity('${item.cartItemId || item.id}', ${item.quantity - 1})">-</button>
+                  <button type="button" class="qty-btn" data-action="decrease-qty" data-id="${safeItemId}" aria-label="Decrease quantity">-</button>
                   <input type="text" class="qty-input" value="${item.quantity}" readonly />
-                  <button class="qty-btn" onclick="State.updateCartQuantity('${item.cartItemId || item.id}', ${item.quantity + 1})">+</button>
+                  <button type="button" class="qty-btn" data-action="increase-qty" data-id="${safeItemId}" aria-label="Increase quantity">+</button>
                 </div>
-                <span class="cart-remove-btn" onclick="State.removeFromCart('${item.cartItemId || item.id}')">Remove</span>
+                <button type="button" class="cart-remove-btn" data-action="remove-item" data-id="${safeItemId}" title="Remove this item">
+                  🗑️ Remove
+                </button>
               </div>
             </div>
           </div>
-        `).join('');
+        `;
+        }).join('');
       }
     }
 
@@ -1370,7 +1454,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (subtotalEl) subtotalEl.textContent = formatCurrency(totals.subtotal);
     if (taxEl) taxEl.textContent = formatCurrency(totals.tax);
-    if (shippingEl) shippingEl.textContent = totals.shippingFee === 0 ? 'FREE' : formatCurrency(totals.shippingFee);
+    if (shippingEl) {
+      if (totals.shippingFee === 0 && totals.subtotal > 0) {
+        shippingEl.innerHTML = `<span style="color: var(--success); font-weight: 700;">FREE</span>`;
+      } else {
+        shippingEl.textContent = totals.subtotal === 0 ? '₹0.00' : formatCurrency(totals.shippingFee);
+      }
+    }
     if (grandTotalEl) grandTotalEl.textContent = formatCurrency(totals.total);
 
     if (discountRow && discountVal) {
@@ -1382,6 +1472,36 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     }
   };
+
+  // Event delegation on cart container for +/- qty and remove
+  if (cartItemsContainer) {
+    cartItemsContainer.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-action]');
+      if (!btn) return;
+      const action = btn.dataset.action;
+      const id = btn.dataset.id;
+      if (!id) return;
+
+      if (action === 'remove-item') {
+        State.removeFromCart(id);
+        showToast('Item removed from cart.', 'info');
+      } else if (action === 'decrease-qty') {
+        const item = State.cart.find(i => (i.cartItemId && String(i.cartItemId) === id) || String(i.id) === id);
+        if (item) {
+          State.updateCartQuantity(id, item.quantity - 1);
+        }
+      } else if (action === 'increase-qty') {
+        const item = State.cart.find(i => (i.cartItemId && String(i.cartItemId) === id) || String(i.id) === id);
+        if (item) {
+          try {
+            State.updateCartQuantity(id, item.quantity + 1);
+          } catch (err) {
+            showToast(err.message, 'error');
+          }
+        }
+      }
+    });
+  }
 
   // Apply Coupon
   const couponApplyBtn = document.getElementById('coupon-apply-btn');

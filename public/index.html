@@ -230,9 +230,9 @@
           <!-- Price Slider -->
           <div class="filter-group">
             <div class="filter-group-title">Maximum Price</div>
-            <input type="range" id="price-slider" class="price-range-slider" min="1000" max="200000" step="2000" value="200000" />
+            <input type="range" id="price-slider" class="price-range-slider" min="100" max="200000" step="100" value="200000" />
             <div class="price-labels">
-              <span>₹1,000</span>
+              <span>₹100</span>
               <strong id="price-display" style="color: var(--accent-cyan);">₹2,00,000</strong>
             </div>
           </div>
@@ -305,22 +305,28 @@
   <div class="cart-drawer-backdrop" id="cart-drawer-backdrop">
     <div class="cart-drawer" id="cart-drawer">
       <div class="cart-drawer-header">
-        <h3>Your Cart</h3>
-        <span class="modal-close-btn" id="cart-close-btn" title="Close Cart">✕</span>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <h3>Your Cart</h3>
+          <span class="badge badge-cyan" id="cart-drawer-count" style="font-size: 0.75rem; padding: 2px 8px; border-radius: 12px; display: none;">0 items</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <button id="cart-clear-all-btn" class="cart-clear-btn" type="button" title="Clear All Items">Clear All</button>
+          <span class="modal-close-btn" id="cart-close-btn" title="Close Cart">✕</span>
+        </div>
       </div>
 
       <!-- Shipping Progress Tracker -->
       <div class="shipping-progress-banner" id="shipping-progress-banner">
         <div class="progress-text" id="shipping-progress-text">
-          Add <strong>₹499.00</strong> more to get <strong>Free Shipping</strong>!
+          Add <strong>₹499.00</strong> more to get <strong>Free Delivery</strong>!
         </div>
         <div class="progress-track">
-          <div class="progress-fill" id="shipping-progress-fill" style="width: 70%;"></div>
+          <div class="progress-fill" id="shipping-progress-fill" style="width: 0%;"></div>
         </div>
       </div>
 
       <!-- Items List -->
-      <div class="cart-items-container" id="cart-items-container">
+      <div class="cart-items-container" id="cart-items-container" data-cart-list="true">
         <!-- Rendered dynamically -->
       </div>
 
